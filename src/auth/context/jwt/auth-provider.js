@@ -92,7 +92,7 @@ export function AuthProvider({ children }) {
         },
       });
     }
-  }, []);
+  });
 
   useEffect(() => {
     initialize();
@@ -118,8 +118,6 @@ export function AuthProvider({ children }) {
         user = res.data.data;
         localStorage.setItem("user", user)
         setSession(token);
-      }).catch((err) => {
-        console.log(err);
       })
     })
 

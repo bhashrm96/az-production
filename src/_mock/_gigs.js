@@ -4,7 +4,7 @@ import { _mock } from './_mock';
 
 // ----------------------------------------------------------------------
 
-export const MODERATOR_STATUS_OPTIONS = [
+export const GIGS_STATUS_OPTIONS = [
   { value: 'active', label: 'Active' },
   { value: 'pending', label: 'Pending' },
   { value: 'banned', label: 'Banned' },
