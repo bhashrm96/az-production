@@ -17,7 +17,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import AvatarGroup, { avatarGroupClasses } from '@mui/material/AvatarGroup';
 
-import { useMockedModerator } from 'src/hooks/use-mocked-gigs';
+import { useMockedGigs } from 'src/hooks/use-mocked-gigs';
 
 import { fDate } from 'src/utils/format-time';
 import { fShortenNumber } from 'src/utils/format-number';
@@ -28,7 +28,7 @@ import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 export default function ProfilePostItem({ post }) {
-  const { gigs } = useMockedModerator();
+  const { gigs } = useMockedGigs();
 
   const commentRef = useRef(null);
 

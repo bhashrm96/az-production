@@ -85,7 +85,6 @@ export function AuthProvider({ children }) {
         });
       }
     } catch (error) {
-      console.error(error);
       dispatch({
         type: 'INITIAL',
         payload: {
@@ -106,7 +105,7 @@ export function AuthProvider({ children }) {
       password,
     };
 
-    var user = null;
+    let user = null;
 
     await axios.post(endpoints.auth.login, data).then((res) => {
       const { token } = res.data.data;
@@ -115,15 +114,12 @@ export function AuthProvider({ children }) {
       setSession(token);
     }).catch(async (err) => {
       await axios.post(endpoints.auth.moderatorLogin, data).then((res) => {
-
         const { token } = res.data.data;
         user = res.data.data;
-        console.log(token, 'resresrerse');
-        console.log(user, 'uuuuuuu');
         localStorage.setItem("user", user)
         setSession(token);
       }).catch((err) => {
-        console.log('err');
+        console.log(err);
       })
     })
 
@@ -176,8 +172,6 @@ export function AuthProvider({ children }) {
   const checkAuthenticated = state.user ? 'authenticated' : 'unauthenticated';
 
   const status = state.loading ? 'loading' : checkAuthenticated;
-
-  console.log(state.user, 'uuuuu');
 
   const memoizedValue = useMemo(
     () => ({

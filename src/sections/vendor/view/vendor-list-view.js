@@ -21,7 +21,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { _roles, _vendorList, MODERATOR_STATUS_OPTIONS } from 'src/_mock';
+import { _roles, _vendorList, VENDOR_STATUS_OPTIONS } from 'src/_mock';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -47,7 +47,7 @@ import axios from 'axios';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...MODERATOR_STATUS_OPTIONS];
+const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...VENDOR_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
   { id: '' },

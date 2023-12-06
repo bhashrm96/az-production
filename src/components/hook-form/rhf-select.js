@@ -77,6 +77,8 @@ RHFSelect.propTypes = {
   maxHeight: PropTypes.number,
   name: PropTypes.string,
   native: PropTypes.bool,
+  onChange: PropTypes.func,
+  index: PropTypes.number,
 };
 
 // ----------------------------------------------------------------------
