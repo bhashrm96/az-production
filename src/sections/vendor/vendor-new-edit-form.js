@@ -85,7 +85,7 @@ export default function VendorNewEditForm({ currentVendor }) {
       lastname: '',
       password: ''
     }),
-    [currentVendor]
+    []
   );
 
   const methods = useForm({
@@ -106,7 +106,7 @@ export default function VendorNewEditForm({ currentVendor }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      let body = {
+      const body = {
         firstname: data.firstname,
         lastname: data.lastname,
         email: data.email,
@@ -118,7 +118,7 @@ export default function VendorNewEditForm({ currentVendor }) {
       if (response.status === 201) {
         const vendorId = response.data.vendorId;
         const permissionsData = {
-          permissions: permissions,
+          permissions,
         };
         const presponse = await axios.post(`https://dev-azproduction-api.flynautstaging.com/admin/vendors/${vendorId}/permissions`, permissionsData);
         console.log(presponse);

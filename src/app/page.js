@@ -1,11 +1,11 @@
-import { HomeView } from 'src/sections/home/view';
+import { JwtLoginView } from 'src/sections/auth/jwt';
 
 // ----------------------------------------------------------------------
 
 export const metadata = {
-  title: 'Minimal: The starting point for your next project',
+  title: 'Jwt: Login',
 };
 
-export default function HomePage() {
-  return <HomeView />;
+export default function LoginPage() {
+  return <JwtLoginView />;
 }

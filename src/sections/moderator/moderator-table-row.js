@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import PropTypes from 'prop-types';
 
 import Button from '@mui/material/Button';
@@ -18,7 +20,6 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 import ModeratorQuickEditForm from './moderator-quick-edit-form';
-import { useEffect, useState } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -28,7 +29,7 @@ export default function ModeratorTableRow({ row, selected, onEditRow, onSelectRo
   const [permissions, setPermissions] = useState([]);
 
   useEffect(() => {
-    let data = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 4)
+    const data = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 4)
     setPermissions(data)
   }, [])
 
@@ -37,10 +38,6 @@ export default function ModeratorTableRow({ row, selected, onEditRow, onSelectRo
   const quickEdit = useBoolean();
 
   const popover = usePopover();
-
-  useEffect(() => {
-    console.log(row, 'rrrrrrrrrrr');
-  }, [])
 
   return (
     <>
@@ -55,7 +52,7 @@ export default function ModeratorTableRow({ row, selected, onEditRow, onSelectRo
 
         <TableCell>
           <ListItemText
-            primary={name}
+            primary={firstname}
             secondary={email}
             primaryTypographyProps={{ typography: 'body2' }}
             secondaryTypographyProps={{
@@ -90,9 +87,9 @@ export default function ModeratorTableRow({ row, selected, onEditRow, onSelectRo
             </IconButton>
           </Tooltip> */}
 
-          {permissions.length > 0 ? permissions[0].permission_name === "full access" ? <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+          {permissions.length > 0 && permissions[0].permission_name === "full access" ? <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
-          </IconButton> : null : null}
+          </IconButton> : null}
         </TableCell>
       </TableRow>
 

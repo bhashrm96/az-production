@@ -2,6 +2,7 @@
 
 import isEqual from 'lodash/isEqual';
 import { useState, useCallback, useEffect } from 'react';
+import axios from 'axios';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -43,15 +44,14 @@ import {
 import ModeratorTableRow from '../moderator-table-row';
 import ModeratorTableToolbar from '../moderator-table-toolbar';
 import ModeratorTableFiltersResult from '../moderator-table-filters-result';
-import axios from 'axios';
 
 // ----------------------------------------------------------------------
 
 const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...MODERATOR_STATUS_OPTIONS];
 
-var TABLE_HEAD;
+let TABLE_HEAD;
 
-let filteredPermission = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 4)
+const filteredPermission = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 4)
 
 if (filteredPermission[0].permission_name === "full access") {
   TABLE_HEAD = [
@@ -118,7 +118,7 @@ export default function ModeratorListView() {
     axios.get("https://dev-azproduction-api.flynautstaging.com/admin/moderators").then((res) => {
       setTableData(res.data);
     })
-    let data = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 4)
+    const data = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 4)
     setPermissions(data)
   }, [])
 
@@ -183,16 +183,16 @@ export default function ModeratorListView() {
             { name: 'List' },
           ]}
           action={
-            permissions.length > 0 ?
+            permissions.length > 0 &&
               permissions[0].permission_name === "full access"
-                ? <Button
-                  component={RouterLink}
-                  href={paths.dashboard.moderator.new}
-                  variant="contained"
-                  startIcon={<Iconify icon="mingcute:add-line" />}
-                >
-                  New Moderator
-                </Button> : null : null
+              ? <Button
+                component={RouterLink}
+                href={paths.dashboard.moderator.new}
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+              >
+                New Moderator
+              </Button> : null
           }
           sx={{
             mb: { xs: 3, md: 5 },

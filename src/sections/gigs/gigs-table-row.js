@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Button from '@mui/material/Button';
@@ -18,7 +19,6 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 import GigsQuickEditForm from './gigs-quick-edit-form';
-import { useEffect, useState } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -28,7 +28,7 @@ export default function GigsTableRow({ row, selected, onEditRow, onSelectRow, on
   const [permissions, setPermissions] = useState([]);
 
   useEffect(() => {
-    let data = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 3)
+    const data = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 3)
     setPermissions(data)
   }, [])
 
@@ -86,9 +86,9 @@ export default function GigsTableRow({ row, selected, onEditRow, onSelectRow, on
             </IconButton>
           </Tooltip> */}
 
-          {permissions.length > 0 ? permissions[0].permission_name === "full access" ? <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+          {permissions.length > 0 && permissions[0].permission_name === "full access" ? <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
-          </IconButton> : null : null}
+          </IconButton> : null}
         </TableCell>
       </TableRow>
 

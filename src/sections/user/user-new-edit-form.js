@@ -64,7 +64,7 @@ export default function UserNewEditForm({ currentUser }) {
       lastname: '',
       password: ''
     }),
-    [currentUser]
+    []
   );
 
   const methods = useForm({
@@ -85,13 +85,13 @@ export default function UserNewEditForm({ currentUser }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      let body = {
+      const body = {
         first_name: data.firstname,
         last_name: data.lastname,
         email_id: data.email,
         password: data.password,
         phone_number: data.phone,
-        gender: gender
+        gender
       }
 
       const response = await axios.post('https://dev-azproduction-api.flynautstaging.com/admin/create-user', body);

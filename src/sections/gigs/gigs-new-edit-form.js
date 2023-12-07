@@ -85,7 +85,7 @@ export default function GigsNewEditForm({ currentGigs }) {
       lastname: '',
       password: ''
     }),
-    [currentGigs]
+    []
   );
 
   const methods = useForm({
@@ -106,7 +106,7 @@ export default function GigsNewEditForm({ currentGigs }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      let body = {
+      const body = {
         firstname: data.firstname,
         lastname: data.lastname,
         email: data.email,

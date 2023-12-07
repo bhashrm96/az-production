@@ -85,7 +85,7 @@ export default function ModernVerifyView() {
 
       <Link
         component={RouterLink}
-        href={paths.authDemo.classic.login}
+        // href={paths.authDemo.classic.login}
         color="inherit"
         variant="subtitle2"
         sx={{

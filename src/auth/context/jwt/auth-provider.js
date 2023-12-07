@@ -92,7 +92,7 @@ export function AuthProvider({ children }) {
         },
       });
     }
-  }, []);
+  }, [state.user]);
 
   useEffect(() => {
     initialize();

@@ -76,7 +76,7 @@ export default function AmplifyNewPasswordView() {
     try {
       await newPassword?.(data.email, data.code, data.password);
 
-      router.push(paths.auth.amplify.login);
+      // router.push(paths.auth.amplify.login);
     } catch (error) {
       console.error(error);
     }
@@ -161,7 +161,7 @@ export default function AmplifyNewPasswordView() {
 
       <Link
         component={RouterLink}
-        href={paths.auth.amplify.login}
+        // href={paths.auth.amplify.login}
         color="inherit"
         variant="subtitle2"
         sx={{

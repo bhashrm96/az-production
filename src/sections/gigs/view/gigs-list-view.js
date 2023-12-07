@@ -2,6 +2,7 @@
 
 import isEqual from 'lodash/isEqual';
 import { useState, useCallback, useEffect } from 'react';
+import axios from 'axios';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -43,15 +44,14 @@ import {
 import GigsTableRow from '../gigs-table-row';
 import GigsTableToolbar from '../gigs-table-toolbar';
 import GigsTableFiltersResult from '../gigs-table-filters-result';
-import axios from 'axios';
 
 // ----------------------------------------------------------------------
 
 const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...GIGS_STATUS_OPTIONS];
 
-var TABLE_HEAD;
+let TABLE_HEAD;
 
-let filteredPermission = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 3)
+const filteredPermission = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 3)
 
 if (filteredPermission[0].permission_name === "full access") {
   TABLE_HEAD = [
@@ -122,7 +122,7 @@ export default function GigsListView() {
       setTableData(res.data.data);
     })
 
-    let data = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 3)
+    const data = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 3)
     setPermissions(data)
   }, [])
 
@@ -187,16 +187,16 @@ export default function GigsListView() {
             { name: 'List' },
           ]}
           action={
-            permissions.length > 0 ?
+            permissions.length > 0 &&
               permissions[0].permission_name === "full access"
-                ? <Button
-                  component={RouterLink}
-                  href={paths.dashboard.gigs.new}
-                  variant="contained"
-                  startIcon={<Iconify icon="mingcute:add-line" />}
-                >
-                  New Gigs
-                </Button> : null : null
+              ? <Button
+                component={RouterLink}
+                href={paths.dashboard.gigs.new}
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+              >
+                New Gigs
+              </Button> : null
           }
           sx={{
             mb: { xs: 3, md: 5 },

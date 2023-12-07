@@ -106,7 +106,7 @@ export default function ModeratorNewEditForm({ currentModerator }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      let body = {
+      const body = {
         firstname: data.firstname,
         lastname: data.lastname,
         email: data.email,
@@ -118,7 +118,7 @@ export default function ModeratorNewEditForm({ currentModerator }) {
       if (response.status === 201) {
         const moderatorId = response.data.moderatorId;
         const permissionsData = {
-          permissions: permissions,
+          permissions
         };
         const presponse = await axios.post(`https://dev-azproduction-api.flynautstaging.com/admin/moderators/${moderatorId}/permissions`, permissionsData);
         console.log(presponse);

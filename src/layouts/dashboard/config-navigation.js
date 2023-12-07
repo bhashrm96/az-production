@@ -369,7 +369,7 @@ export function useNavData() {
     return data;
   }
 
-  let filteredData = [{
+  const filteredData = [{
     subheader: t('management'),
     items: []
   }]

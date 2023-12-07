@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
@@ -18,7 +19,6 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 import VendorQuickEditForm from './vendor-quick-edit-form';
-import { useEffect, useState } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -28,7 +28,7 @@ export default function VendorTableRow({ row, selected, onEditRow, onSelectRow, 
   const [permissions, setPermissions] = useState([]);
 
   useEffect(() => {
-    let data = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 2)
+    const data = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 2)
     setPermissions(data)
   }, [])
 
@@ -51,7 +51,7 @@ export default function VendorTableRow({ row, selected, onEditRow, onSelectRow, 
 
         <TableCell>
           <ListItemText
-            primary={name}
+            primary={firstname}
             secondary={email}
             primaryTypographyProps={{ typography: 'body2' }}
             secondaryTypographyProps={{
@@ -86,9 +86,9 @@ export default function VendorTableRow({ row, selected, onEditRow, onSelectRow, 
             </IconButton>
           </Tooltip> */}
 
-          {permissions.length > 0 ? permissions[0].permission_name === "full access" ? <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+          {permissions.length > 0 && permissions[0].permission_name === "full access" ? <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
-          </IconButton> : null : null}
+          </IconButton> : null}
         </TableCell>
       </TableRow>
 
