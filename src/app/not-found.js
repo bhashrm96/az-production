@@ -7,5 +7,5 @@ export const metadata = {
 };
 
 export default function NotFoundPage() {
-  return <NotFoundView />;
+  return <div>not found</div>;
 }
