@@ -65,7 +65,7 @@ export default function ClassicRegisterView() {
         <Typography variant="body2"> Already have an account? </Typography>
 
         <Link
-          // href={paths.authDemo.classic.login} 
+          href='/'
           component={RouterLink} variant="subtitle2">
           Sign in
         </Link>

@@ -129,7 +129,7 @@ export default function ModernNewPasswordView() {
 
       <Link
         component={RouterLink}
-        // href={paths.authDemo.modern.login}
+        href='/'
         color="inherit"
         variant="subtitle2"
         sx={{

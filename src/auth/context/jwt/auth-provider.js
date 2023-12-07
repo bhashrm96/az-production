@@ -92,7 +92,7 @@ export function AuthProvider({ children }) {
         },
       });
     }
-  }, [state.user]);
+  }, []);
 
   useEffect(() => {
     initialize();
@@ -110,7 +110,7 @@ export function AuthProvider({ children }) {
     await axios.post(endpoints.auth.login, data).then((res) => {
       const { token } = res.data.data;
       user = res.data.data;
-
+      localStorage.setItem("user", JSON.stringify(user))
       setSession(token);
     }).catch(async (err) => {
       await axios.post(endpoints.auth.moderatorLogin, data).then((res) => {

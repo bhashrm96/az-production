@@ -5,6 +5,7 @@ import axios from 'src/utils/axios';
 // ----------------------------------------------------------------------
 
 function jwtDecode(token) {
+  console.log('cccccccccccc');
   const base64Url = token.split('.')[1];
   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
   const jsonPayload = decodeURIComponent(
@@ -60,6 +61,7 @@ export const tokenExpired = (exp) => {
 // ----------------------------------------------------------------------
 
 export const setSession = (accessToken) => {
+  console.log('bbbbbbbbbb');
   if (accessToken) {
     sessionStorage.setItem('accessToken', accessToken);
 

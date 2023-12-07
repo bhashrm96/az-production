@@ -86,7 +86,7 @@ export default function AmplifyRegisterView() {
         <Typography variant="body2"> Already have an account? </Typography>
 
         <Link
-          // href={paths.auth.amplify.login} 
+          href='/'
           component={RouterLink} variant="subtitle2">
           Sign in
         </Link>

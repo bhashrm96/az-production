@@ -29,8 +29,10 @@ export default function ModeratorTableRow({ row, selected, onEditRow, onSelectRo
   const [permissions, setPermissions] = useState([]);
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 4)
-    setPermissions(data)
+    if ('moderator' in JSON.parse(localStorage.getItem("user"))) {
+      const data = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 4)
+      setPermissions(data)
+    }
   }, [])
 
   const confirm = useBoolean();
@@ -87,9 +89,13 @@ export default function ModeratorTableRow({ row, selected, onEditRow, onSelectRo
             </IconButton>
           </Tooltip> */}
 
-          {permissions.length > 0 && permissions[0].permission_name === "full access" ? <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton> : null}
+          {'moderator' in JSON.parse(localStorage.getItem("user")) ? (permissions.length > 0 && permissions[0].permission_name === "full access" ?
+            <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+              <Iconify icon="eva:more-vertical-fill" />
+            </IconButton> : null) :
+            <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+              <Iconify icon="eva:more-vertical-fill" />
+            </IconButton>}
         </TableCell>
       </TableRow>
 

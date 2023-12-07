@@ -51,17 +51,27 @@ const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...GIGS_STATUS_OPTIONS];
 
 let TABLE_HEAD;
 
-const filteredPermission = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 3)
+if ('moderator' in JSON.parse(localStorage.getItem("user"))) {
+  const filteredPermission = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 3)
 
-if (filteredPermission[0].permission_name === "full access") {
-  TABLE_HEAD = [
-    { id: '' },
-    { id: 'first_name', label: 'Name' },
-    { id: 'position', label: 'Position' },
-    { id: 'gigs_title', label: 'Gig Name' },
-    { id: 'gigs_category_name', label: 'Gig Category' },
-    { id: '' },
-  ];
+  if (filteredPermission[0].permission_name === "full access") {
+    TABLE_HEAD = [
+      { id: '' },
+      { id: 'first_name', label: 'Name' },
+      { id: 'position', label: 'Position' },
+      { id: 'gigs_title', label: 'Gig Name' },
+      { id: 'gigs_category_name', label: 'Gig Category' },
+      { id: '' },
+    ];
+  } else {
+    TABLE_HEAD = [
+      { id: '' },
+      { id: 'first_name', label: 'Name' },
+      { id: 'position', label: 'Position' },
+      { id: 'gigs_title', label: 'Gig Name' },
+      { id: 'gigs_category_name', label: 'Gig Category' },
+    ];
+  }
 } else {
   TABLE_HEAD = [
     { id: '' },
@@ -69,8 +79,11 @@ if (filteredPermission[0].permission_name === "full access") {
     { id: 'position', label: 'Position' },
     { id: 'gigs_title', label: 'Gig Name' },
     { id: 'gigs_category_name', label: 'Gig Category' },
+    { id: '' },
   ];
 }
+
+
 
 const defaultFilters = {
   name: '',
@@ -122,8 +135,10 @@ export default function GigsListView() {
       setTableData(res.data.data);
     })
 
-    const data = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 3)
-    setPermissions(data)
+    if ('moderator' in JSON.parse(localStorage.getItem("user"))) {
+      const data = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 3)
+      setPermissions(data)
+    }
   }, [])
 
   const handleFilters = useCallback(
@@ -187,16 +202,24 @@ export default function GigsListView() {
             { name: 'List' },
           ]}
           action={
-            permissions.length > 0 &&
-              permissions[0].permission_name === "full access"
-              ? <Button
-                component={RouterLink}
-                href={paths.dashboard.gigs.new}
-                variant="contained"
-                startIcon={<Iconify icon="mingcute:add-line" />}
-              >
+            'moderator' in JSON.parse(localStorage.getItem("user"))
+              ? (permissions.length > 0 &&
+                permissions[0].permission_name === "full access"
+                ? <Button
+                  component={RouterLink}
+                  href={paths.dashboard.gigs.new}
+                  variant="contained"
+                  startIcon={<Iconify icon="mingcute:add-line" />}
+                >
+                  New Gigs
+                </Button> : null) : <Button
+                  component={RouterLink}
+                  href={paths.dashboard.gigs.new}
+                  variant="contained"
+                  startIcon={<Iconify icon="mingcute:add-line" />}
+                >
                 New Gigs
-              </Button> : null
+              </Button>
           }
           sx={{
             mb: { xs: 3, md: 5 },

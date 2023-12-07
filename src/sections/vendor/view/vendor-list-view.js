@@ -51,18 +51,29 @@ const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...VENDOR_STATUS_OPTIONS
 
 let TABLE_HEAD;
 
-const filteredPermission = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 2)
+if ('moderator' in JSON.parse(localStorage.getItem("user"))) {
+  const filteredPermission = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 2)
 
-if (filteredPermission[0].permission_name === "full access") {
-  TABLE_HEAD = [
-    { id: '' },
-    { id: 'email', label: 'Email' },
-    { id: 'phone', label: 'Phone Number' },
-    { id: 'firstname', label: 'First Name' },
-    { id: 'lastname', label: 'Last Name' },
-    { id: 'status', label: 'Status' },
-    { id: '' },
-  ];
+  if (filteredPermission[0].permission_name === "full access") {
+    TABLE_HEAD = [
+      { id: '' },
+      { id: 'email', label: 'Email' },
+      { id: 'phone', label: 'Phone Number' },
+      { id: 'firstname', label: 'First Name' },
+      { id: 'lastname', label: 'Last Name' },
+      { id: 'status', label: 'Status' },
+      { id: '' },
+    ];
+  } else {
+    TABLE_HEAD = [
+      { id: '' },
+      { id: 'email', label: 'Email' },
+      { id: 'phone', label: 'Phone Number' },
+      { id: 'firstname', label: 'First Name' },
+      { id: 'lastname', label: 'Last Name' },
+      { id: 'status', label: 'Status' },
+    ];
+  }
 } else {
   TABLE_HEAD = [
     { id: '' },
@@ -71,8 +82,10 @@ if (filteredPermission[0].permission_name === "full access") {
     { id: 'firstname', label: 'First Name' },
     { id: 'lastname', label: 'Last Name' },
     { id: 'status', label: 'Status' },
+    { id: '' },
   ];
 }
+
 
 const defaultFilters = {
   name: '',
@@ -118,8 +131,11 @@ export default function VendorListView() {
     axios.get("https://dev-azproduction-api.flynautstaging.com/admin/moderators").then((res) => {
       setTableData(res.data);
     })
-    const data = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 2)
-    setPermissions(data)
+
+    if ('moderator' in JSON.parse(localStorage.getItem("user"))) {
+      const data = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 2)
+      setPermissions(data)
+    }
   }, [])
 
   const handleFilters = useCallback(
@@ -183,16 +199,24 @@ export default function VendorListView() {
             { name: 'List' },
           ]}
           action={
-            permissions.length > 0 &&
-              permissions[0].permission_name === "full access"
-              ? <Button
-                component={RouterLink}
-                href={paths.dashboard.vendor.new}
-                variant="contained"
-                startIcon={<Iconify icon="mingcute:add-line" />}
-              >
+            'moderator' in JSON.parse(localStorage.getItem("user"))
+              ? (permissions.length > 0 &&
+                permissions[0].permission_name === "full access"
+                ? <Button
+                  component={RouterLink}
+                  href={paths.dashboard.vendor.new}
+                  variant="contained"
+                  startIcon={<Iconify icon="mingcute:add-line" />}
+                >
+                  New Vendor
+                </Button> : null) : <Button
+                  component={RouterLink}
+                  href={paths.dashboard.vendor.new}
+                  variant="contained"
+                  startIcon={<Iconify icon="mingcute:add-line" />}
+                >
                 New Vendor
-              </Button> : null
+              </Button>
           }
           sx={{
             mb: { xs: 3, md: 5 },

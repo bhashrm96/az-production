@@ -110,7 +110,7 @@ export default function FirebaseRegisterView() {
         <Typography variant="body2"> Already have an account? </Typography>
 
         <Link
-          // href={paths.auth.firebase.login} 
+          href='/'
           component={RouterLink} variant="subtitle2">
           Sign in
         </Link>
