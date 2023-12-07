@@ -19,12 +19,19 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 import UserQuickEditForm from './user-quick-edit-form';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 // ----------------------------------------------------------------------
 
 export default function UserTableRow({ row, selected, onEditRow, onSelectRow, }) {
   const { first_name, avatarUrl, last_name, status, email_id, phone_number } = row;
+
+  const [permissions, setPermissions] = useState([]);
+
+  useEffect(() => {
+    let data = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 1)
+    setPermissions(data)
+  }, [])
 
   const confirm = useBoolean();
 
@@ -89,9 +96,9 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, })
             </IconButton>
           </Tooltip> */}
 
-          <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+          {permissions.length > 0 ? permissions[0].permission_name === "full access" ? <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
+          </IconButton> : null : null}
         </TableCell>
       </TableRow>
 

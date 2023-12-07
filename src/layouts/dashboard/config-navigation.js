@@ -100,6 +100,7 @@ export function useNavData() {
             title: t('user'),
             path: paths.dashboard.user.list,
             icon: ICONS.user,
+            id: 1
             // children: [
             //   { title: t('profile'), path: paths.dashboard.user.root },
             //   { title: t('cards'), path: paths.dashboard.user.cards },
@@ -113,6 +114,7 @@ export function useNavData() {
             title: t('vendor'),
             path: paths.dashboard.vendor.list,
             icon: ICONS.user,
+            id: 2
             // children: [
             //   { title: t('profile'), path: paths.dashboard.user.root },
             //   { title: t('cards'), path: paths.dashboard.user.cards },
@@ -126,6 +128,7 @@ export function useNavData() {
             title: t('gigs'),
             path: paths.dashboard.gigs.list,
             icon: ICONS.user,
+            id: 3
             // children: [
             //   { title: t('profile'), path: paths.dashboard.user.root },
             //   { title: t('cards'), path: paths.dashboard.user.cards },
@@ -139,6 +142,7 @@ export function useNavData() {
             title: t('moderator'),
             path: paths.dashboard.moderator.list,
             icon: ICONS.user,
+            id: 4
             // children: [
             //   { title: t('profile'), path: paths.dashboard.moderator.root },
             //   { title: t('cards'), path: paths.dashboard.moderator.cards },
@@ -357,5 +361,25 @@ export function useNavData() {
     [t]
   );
 
-  return data;
+
+  const currentUser = JSON.parse(localStorage.getItem('user')) || {};
+  const currentUserPermissions = currentUser.permissions || [];
+
+  if (!('moderator' in currentUser)) {
+    return data;
+  }
+
+  let filteredData = [{
+    subheader: t('management'),
+    items: []
+  }]
+
+  filteredData[0].items = data[0].items.filter(item => {
+    const permission = currentUserPermissions.find(
+      perm => perm.page_id === item.id && perm.permission_name !== 'deny'
+    );
+    return permission !== undefined;
+  });
+
+  return filteredData;
 }

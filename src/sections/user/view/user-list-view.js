@@ -49,15 +49,30 @@ import axios from 'axios';
 
 const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...MODERATOR_STATUS_OPTIONS];
 
-const TABLE_HEAD = [
-  { id: '' },
-  { id: 'email', label: 'Email' },
-  { id: 'phone', label: 'Phone Number' },
-  { id: 'firstname', label: 'First Name' },
-  { id: 'lastname', label: 'Last Name' },
-  { id: 'status', label: 'Status' },
-  { id: '' },
-];
+var TABLE_HEAD;
+
+let filteredPermission = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 1)
+
+if (filteredPermission[0].permission_name === "full access") {
+  TABLE_HEAD = [
+    { id: '' },
+    { id: 'email', label: 'Email' },
+    { id: 'phone', label: 'Phone Number' },
+    { id: 'firstname', label: 'First Name' },
+    { id: 'lastname', label: 'Last Name' },
+    { id: 'status', label: 'Status' },
+    { id: '' },
+  ];
+} else {
+  TABLE_HEAD = [
+    { id: '' },
+    { id: 'email', label: 'Email' },
+    { id: 'phone', label: 'Phone Number' },
+    { id: 'firstname', label: 'First Name' },
+    { id: 'lastname', label: 'Last Name' },
+    { id: 'status', label: 'Status' },
+  ];
+}
 
 const defaultFilters = {
   name: '',
@@ -97,10 +112,14 @@ export default function UserListView() {
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
+  const [permissions, setPermissions] = useState([]);
+
   useEffect(() => {
     axios.get("https://dev-azproduction-api.flynautstaging.com/admin/all-users").then((res) => {
       setTableData(res.data);
     })
+    let data = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 1)
+    setPermissions(data)
   }, [])
 
   const handleFilters = useCallback(
@@ -164,14 +183,16 @@ export default function UserListView() {
             { name: 'List' },
           ]}
           action={
-            <Button
-              component={RouterLink}
-              href={paths.dashboard.user.new}
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New User
-            </Button>
+            permissions.length > 0 ?
+              permissions[0].permission_name === "full access"
+                ? <Button
+                  component={RouterLink}
+                  href={paths.dashboard.user.new}
+                  variant="contained"
+                  startIcon={<Iconify icon="mingcute:add-line" />}
+                >
+                  New User
+                </Button> : null : null
           }
           sx={{
             mb: { xs: 3, md: 5 },
@@ -286,7 +307,7 @@ export default function UserListView() {
                     .map((row) => (
                       <UserTableRow
                         key={row.id}
-                        row={row}
+                        row={row} data
                         selected={table.selected.includes(row.id)}
                         onSelectRow={() => table.onSelectRow(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}

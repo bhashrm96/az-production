@@ -49,14 +49,28 @@ import axios from 'axios';
 
 const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...GIGS_STATUS_OPTIONS];
 
-const TABLE_HEAD = [
-  { id: '' },
-  { id: 'first_name', label: 'Name' },
-  { id: 'position', label: 'Position' },
-  { id: 'gigs_title', label: 'Gig Name' },
-  { id: 'gigs_category_name', label: 'Gig Category' },
-  { id: '' },
-];
+var TABLE_HEAD;
+
+let filteredPermission = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 3)
+
+if (filteredPermission[0].permission_name === "full access") {
+  TABLE_HEAD = [
+    { id: '' },
+    { id: 'first_name', label: 'Name' },
+    { id: 'position', label: 'Position' },
+    { id: 'gigs_title', label: 'Gig Name' },
+    { id: 'gigs_category_name', label: 'Gig Category' },
+    { id: '' },
+  ];
+} else {
+  TABLE_HEAD = [
+    { id: '' },
+    { id: 'first_name', label: 'Name' },
+    { id: 'position', label: 'Position' },
+    { id: 'gigs_title', label: 'Gig Name' },
+    { id: 'gigs_category_name', label: 'Gig Category' },
+  ];
+}
 
 const defaultFilters = {
   name: '',
@@ -96,6 +110,8 @@ export default function GigsListView() {
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
+  const [permissions, setPermissions] = useState([]);
+
   useEffect(() => {
     axios.get("https://dev-azproduction-api.flynautstaging.com/gigs/view_all_gigs", {
       headers: {
@@ -105,6 +121,9 @@ export default function GigsListView() {
 
       setTableData(res.data.data);
     })
+
+    let data = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 3)
+    setPermissions(data)
   }, [])
 
   const handleFilters = useCallback(
@@ -168,14 +187,16 @@ export default function GigsListView() {
             { name: 'List' },
           ]}
           action={
-            <Button
-              component={RouterLink}
-              href={paths.dashboard.gigs.new}
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New Gigs
-            </Button>
+            permissions.length > 0 ?
+              permissions[0].permission_name === "full access"
+                ? <Button
+                  component={RouterLink}
+                  href={paths.dashboard.gigs.new}
+                  variant="contained"
+                  startIcon={<Iconify icon="mingcute:add-line" />}
+                >
+                  New Gigs
+                </Button> : null : null
           }
           sx={{
             mb: { xs: 3, md: 5 },
