@@ -1,4 +1,5 @@
 import { HomeView } from 'src/sections/home/view';
+import { redirect } from 'next/navigation';
 
 // ----------------------------------------------------------------------
 
@@ -7,5 +8,6 @@ export const metadata = {
 };
 
 export default function HomePage() {
-  return <div>home</div>;
+  redirect('/login');
+  return null;
 }

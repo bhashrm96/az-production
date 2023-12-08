@@ -7,6 +7,8 @@ export * from './_job';
 export * from './_user';
 export * from './_moderator';
 export * from './_vendor';
+export * from './_events';
+export * from './_classified';
 export * from './_gigs';
 export * from './_tour';
 export * from './_blog';

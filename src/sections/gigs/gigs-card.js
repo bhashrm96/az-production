@@ -23,7 +23,7 @@ import Iconify from 'src/components/iconify';
 export default function GigsCard({ gigs }) {
   const theme = useTheme();
 
-  const { name, coverUrl, role, totalFollowers, totalPosts, avatarUrl, totalFollowing } = gigs;
+  const { first_name, image, gigs_title, gigs_category_name, position, role, expertise, totalFollowers, totalPosts, avatarUrl, totalFollowing } = gigs;
 
   return (
     <Card sx={{ textAlign: 'center' }}>
@@ -40,8 +40,8 @@ export default function GigsCard({ gigs }) {
         />
 
         <Avatar
-          alt={name}
-          src={avatarUrl}
+          alt={first_name}
+          src={first_name}
           sx={{
             width: 64,
             height: 64,
@@ -55,8 +55,8 @@ export default function GigsCard({ gigs }) {
         />
 
         <Image
-          src={coverUrl}
-          alt={coverUrl}
+          src={image}
+          alt={image}
           ratio="16/9"
           overlay={alpha(theme.palette.grey[900], 0.48)}
         />
@@ -64,13 +64,13 @@ export default function GigsCard({ gigs }) {
 
       <ListItemText
         sx={{ mt: 7, mb: 1 }}
-        primary={name}
+        primary={gigs_title}
         secondary={role}
         primaryTypographyProps={{ typography: 'subtitle1' }}
         secondaryTypographyProps={{ component: 'span', mt: 0.5 }}
       />
 
-      <Stack direction="row" alignItems="center" justifyContent="center" sx={{ mb: 2.5 }}>
+      {/* <Stack direction="row" alignItems="center" justifyContent="center" sx={{ mb: 2.5 }}>
         {_socials.map((social) => (
           <IconButton
             key={social.name}
@@ -84,7 +84,7 @@ export default function GigsCard({ gigs }) {
             <Iconify icon={social.icon} />
           </IconButton>
         ))}
-      </Stack>
+      </Stack> */}
 
       <Divider sx={{ borderStyle: 'dashed' }} />
 
@@ -95,24 +95,24 @@ export default function GigsCard({ gigs }) {
       >
         <div>
           <Typography variant="caption" component="div" sx={{ mb: 0.5, color: 'text.secondary' }}>
-            Follower
+            Position
           </Typography>
-          {fShortenNumber(totalFollowers)}
+          {position}
         </div>
 
         <div>
           <Typography variant="caption" component="div" sx={{ mb: 0.5, color: 'text.secondary' }}>
-            Following
+            Expertise
           </Typography>
 
-          {fShortenNumber(totalFollowing)}
+          {expertise}
         </div>
 
         <div>
           <Typography variant="caption" component="div" sx={{ mb: 0.5, color: 'text.secondary' }}>
-            Total Post
+            Category
           </Typography>
-          {fShortenNumber(totalPosts)}
+          {gigs_category_name}
         </div>
       </Box>
     </Card>

@@ -23,7 +23,7 @@ const METHODS = [
   {
     id: 'jwt',
     label: 'Jwt',
-    path: paths.auth.jwt.login,
+    path: paths.login.root,
     icon: '/assets/icons/auth/ic_jwt.svg',
   },
   // {

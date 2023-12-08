@@ -54,41 +54,40 @@ export function useNavData() {
     () => [
       // OVERVIEW
       // ----------------------------------------------------------------------
-      // {
-      //   subheader: t('overview'),
-      //   items: [
-      //     {
-      //       title: t('app'),
-      //       path: paths.dashboard.root,
-      //       icon: ICONS.dashboard,
-      //     },
-      //     {
-      //       title: t('ecommerce'),
-      //       path: paths.dashboard.general.ecommerce,
-      //       icon: ICONS.ecommerce,
-      //     },
-      //     {
-      //       title: t('analytics'),
-      //       path: paths.dashboard.general.analytics,
-      //       icon: ICONS.analytics,
-      //     },
-      //     {
-      //       title: t('banking'),
-      //       path: paths.dashboard.general.banking,
-      //       icon: ICONS.banking,
-      //     },
-      //     {
-      //       title: t('booking'),
-      //       path: paths.dashboard.general.booking,
-      //       icon: ICONS.booking,
-      //     },
-      //     {
-      //       title: t('file'),
-      //       path: paths.dashboard.general.file,
-      //       icon: ICONS.file,
-      //     },
-      //   ],
-      // },
+      {
+        items: [
+          {
+            title: t('dashboard'),
+            path: paths.dashboard.root,
+            icon: ICONS.dashboard,
+          },
+          // {
+          //   title: t('ecommerce'),
+          //   path: paths.dashboard.general.ecommerce,
+          //   icon: ICONS.ecommerce,
+          // },
+          // {
+          //   title: t('analytics'),
+          //   path: paths.dashboard.general.analytics,
+          //   icon: ICONS.analytics,
+          // },
+          // {
+          //   title: t('banking'),
+          //   path: paths.dashboard.general.banking,
+          //   icon: ICONS.banking,
+          // },
+          // {
+          //   title: t('booking'),
+          //   path: paths.dashboard.general.booking,
+          //   icon: ICONS.booking,
+          // },
+          // {
+          //   title: t('file'),
+          //   path: paths.dashboard.general.file,
+          //   icon: ICONS.file,
+          // },
+        ],
+      },
 
       // MANAGEMENT
       // ----------------------------------------------------------------------
@@ -98,17 +97,17 @@ export function useNavData() {
           // USER
           {
             title: t('user'),
-            path: paths.dashboard.user.list,
+            path: paths.dashboard.user.root,
             icon: ICONS.user,
-            id: 1
-            // children: [
-            //   { title: t('profile'), path: paths.dashboard.user.root },
-            //   { title: t('cards'), path: paths.dashboard.user.cards },
-            //   { title: t('list'), path: paths.dashboard.user.list },
-            //   { title: t('create'), path: paths.dashboard.user.new },
-            //   { title: t('edit'), path: paths.dashboard.user.demo.edit },
-            //   { title: t('account'), path: paths.dashboard.user.account },
-            // ],
+            id: 1,
+            children: [
+              { title: t('Film Professionals'), path: paths.dashboard.user.professionals },
+              { title: t('Producers'), path: paths.dashboard.user.producers },
+              // { title: t('list'), path: paths.dashboard.user.list },
+              // { title: t('create'), path: paths.dashboard.user.new },
+              // { title: t('edit'), path: paths.dashboard.user.demo.edit },
+              // { title: t('account'), path: paths.dashboard.user.account },
+            ],
           },
           {
             title: t('vendor'),
@@ -126,7 +125,7 @@ export function useNavData() {
           },
           {
             title: t('gigs'),
-            path: paths.dashboard.gigs.list,
+            path: paths.dashboard.gigs.cards,
             icon: ICONS.user,
             id: 3
             // children: [
@@ -143,6 +142,32 @@ export function useNavData() {
             path: paths.dashboard.moderator.list,
             icon: ICONS.user,
             id: 4
+            // children: [
+            //   { title: t('profile'), path: paths.dashboard.moderator.root },
+            //   { title: t('cards'), path: paths.dashboard.moderator.cards },
+            //   { title: t('create'), path: paths.dashboard.moderator.new },
+            //   { title: t('edit'), path: paths.dashboard.moderator.demo.edit },
+            //   { title: t('account'), path: paths.dashboard.moderator.account },
+            // ],
+          },
+          {
+            title: t('events'),
+            path: paths.dashboard.events.cards,
+            icon: ICONS.user,
+            id: 5
+            // children: [
+            //   { title: t('profile'), path: paths.dashboard.moderator.root },
+            //   { title: t('cards'), path: paths.dashboard.moderator.cards },
+            //   { title: t('create'), path: paths.dashboard.moderator.new },
+            //   { title: t('edit'), path: paths.dashboard.moderator.demo.edit },
+            //   { title: t('account'), path: paths.dashboard.moderator.account },
+            // ],
+          },
+          {
+            title: t('classified'),
+            path: paths.dashboard.classified.cards,
+            icon: ICONS.user,
+            id: 6
             // children: [
             //   { title: t('profile'), path: paths.dashboard.moderator.root },
             //   { title: t('cards'), path: paths.dashboard.moderator.cards },
@@ -370,16 +395,52 @@ export function useNavData() {
   }
 
   const filteredData = [{
+    items: [
+      {
+        title: t('dashboard'),
+        path: paths.dashboard.root,
+        icon: ICONS.dashboard,
+      },
+      // {
+      //   title: t('ecommerce'),
+      //   path: paths.dashboard.general.ecommerce,
+      //   icon: ICONS.ecommerce,
+      // },
+      // {
+      //   title: t('analytics'),
+      //   path: paths.dashboard.general.analytics,
+      //   icon: ICONS.analytics,
+      // },
+      // {
+      //   title: t('banking'),
+      //   path: paths.dashboard.general.banking,
+      //   icon: ICONS.banking,
+      // },
+      // {
+      //   title: t('booking'),
+      //   path: paths.dashboard.general.booking,
+      //   icon: ICONS.booking,
+      // },
+      // {
+      //   title: t('file'),
+      //   path: paths.dashboard.general.file,
+      //   icon: ICONS.file,
+      // },
+    ],
+  },
+  {
     subheader: t('management'),
     items: []
   }]
 
-  filteredData[0].items = data[0].items.filter(item => {
+  filteredData[1].items = data[1].items.filter(item => {
     const permission = currentUserPermissions.find(
       perm => perm.page_id === item.id && perm.permission_name !== 'deny'
     );
-    return permission !== undefined;
+    return permission !== undefined && item.id !== 4;
   });
+
+
 
   return filteredData;
 }
