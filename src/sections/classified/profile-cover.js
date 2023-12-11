@@ -17,7 +17,11 @@ export default function ProfileCover({ name, avatarUrl, role, coverUrl }) {
     <Box
       sx={{
         ...bgGradient({
+<<<<<<< HEAD
           color: alpha(theme.palette.primary.darker, 0.3),
+=======
+          color: alpha(theme.palette.primary.darker, 0.8),
+>>>>>>> 3158989336036a9443c48a8277182b1baf2e5a3a
           imgUrl: coverUrl,
         }),
         height: 1,
@@ -34,7 +38,11 @@ export default function ProfileCover({ name, avatarUrl, role, coverUrl }) {
           position: { md: 'absolute' },
         }}
       >
+<<<<<<< HEAD
         {/* <Avatar
+=======
+        <Avatar
+>>>>>>> 3158989336036a9443c48a8277182b1baf2e5a3a
           src={avatarUrl}
           alt={name}
           sx={{
@@ -43,7 +51,11 @@ export default function ProfileCover({ name, avatarUrl, role, coverUrl }) {
             height: { xs: 64, md: 128 },
             border: `solid 2px ${theme.palette.common.white}`,
           }}
+<<<<<<< HEAD
         /> */}
+=======
+        />
+>>>>>>> 3158989336036a9443c48a8277182b1baf2e5a3a
 
         <ListItemText
           sx={{
@@ -55,7 +67,10 @@ export default function ProfileCover({ name, avatarUrl, role, coverUrl }) {
           secondary={role}
           primaryTypographyProps={{
             typography: 'h4',
+<<<<<<< HEAD
             color: `${!coverUrl ? 'black' : 'inherit'}`
+=======
+>>>>>>> 3158989336036a9443c48a8277182b1baf2e5a3a
           }}
           secondaryTypographyProps={{
             mt: 0.5,

@@ -32,8 +32,13 @@ export default function EventsCardList() {
         md: 'repeat(3, 1fr)',
       }}
     >
+<<<<<<< HEAD
       {events.length > 0 && events.map((events, index) => (
         <EventsCard key={events.id} events={events} index={index} />
+=======
+      {events.length > 0 && events.map((events) => (
+        <EventsCard key={events.id} events={events} />
+>>>>>>> 3158989336036a9443c48a8277182b1baf2e5a3a
       ))}
     </Box>
   );

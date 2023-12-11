@@ -125,7 +125,10 @@ export const paths = {
     },
     events: {
       root: `${ROOTS.DASHBOARD}/events`,
+<<<<<<< HEAD
       details: (id) => `${ROOTS.DASHBOARD}/events/${id}`,
+=======
+>>>>>>> 3158989336036a9443c48a8277182b1baf2e5a3a
       new: `${ROOTS.DASHBOARD}/events/new`,
       list: `${ROOTS.DASHBOARD}/events/list`,
       cards: `${ROOTS.DASHBOARD}/events/cards`,
@@ -138,7 +141,10 @@ export const paths = {
     },
     classified: {
       root: `${ROOTS.DASHBOARD}/classified`,
+<<<<<<< HEAD
       details: (id) => `${ROOTS.DASHBOARD}/classified/${id}`,
+=======
+>>>>>>> 3158989336036a9443c48a8277182b1baf2e5a3a
       new: `${ROOTS.DASHBOARD}/classified/new`,
       list: `${ROOTS.DASHBOARD}/classified/list`,
       cards: `${ROOTS.DASHBOARD}/classified/cards`,

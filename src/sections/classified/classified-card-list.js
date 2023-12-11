@@ -32,8 +32,13 @@ export default function ClassifiedCardList() {
         md: 'repeat(3, 1fr)',
       }}
     >
+<<<<<<< HEAD
       {classified.length > 0 && classified.map((classified, index) => (
         <ClassifiedCard key={classified.id} classified={classified} index={index} />
+=======
+      {classified.length > 0 && classified.map((classified) => (
+        <ClassifiedCard key={classified.id} classified={classified} />
+>>>>>>> 3158989336036a9443c48a8277182b1baf2e5a3a
       ))}
     </Box>
   );

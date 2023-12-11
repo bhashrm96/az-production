@@ -71,7 +71,11 @@ export default function Auth0LoginView() {
   return (
     <>
       <Typography variant="h4" sx={{ mb: 5 }}>
+<<<<<<< HEAD
         Sign in to AZ Production Guide
+=======
+        Sign in to AZ Production
+>>>>>>> 3158989336036a9443c48a8277182b1baf2e5a3a
       </Typography>
 
       <Stack spacing={2}>

@@ -74,7 +74,42 @@ export default function GigsCard({ gigs, index }) {
           secondaryTypographyProps={{ component: 'span', mt: 0.5 }}
         />
 
+<<<<<<< HEAD
         {/* <Stack direction="row" alignItems="center" justifyContent="center" sx={{ mb: 2.5 }}>
+=======
+        <Avatar
+          alt={first_name}
+          src={first_name}
+          sx={{
+            width: 64,
+            height: 64,
+            zIndex: 11,
+            left: 0,
+            right: 0,
+            bottom: -32,
+            mx: 'auto',
+            position: 'absolute',
+          }}
+        />
+
+        <Image
+          src={image}
+          alt={image}
+          ratio="16/9"
+          overlay={alpha(theme.palette.grey[900], 0.48)}
+        />
+      </Box>
+
+      <ListItemText
+        sx={{ mt: 7, mb: 1 }}
+        primary={gigs_title}
+        secondary={role}
+        primaryTypographyProps={{ typography: 'subtitle1' }}
+        secondaryTypographyProps={{ component: 'span', mt: 0.5 }}
+      />
+
+      {/* <Stack direction="row" alignItems="center" justifyContent="center" sx={{ mb: 2.5 }}>
+>>>>>>> 3158989336036a9443c48a8277182b1baf2e5a3a
         {_socials.map((social) => (
           <IconButton
             key={social.name}
@@ -92,6 +127,7 @@ export default function GigsCard({ gigs, index }) {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
+<<<<<<< HEAD
         <Box
           display="grid"
           gridTemplateColumns="repeat(3, 1fr)"
@@ -121,6 +157,36 @@ export default function GigsCard({ gigs, index }) {
         </Box>
       </Card>
     </div>
+=======
+      <Box
+        display="grid"
+        gridTemplateColumns="repeat(3, 1fr)"
+        sx={{ py: 3, typography: 'subtitle1' }}
+      >
+        <div>
+          <Typography variant="caption" component="div" sx={{ mb: 0.5, color: 'text.secondary' }}>
+            Position
+          </Typography>
+          {position}
+        </div>
+
+        <div>
+          <Typography variant="caption" component="div" sx={{ mb: 0.5, color: 'text.secondary' }}>
+            Expertise
+          </Typography>
+
+          {expertise}
+        </div>
+
+        <div>
+          <Typography variant="caption" component="div" sx={{ mb: 0.5, color: 'text.secondary' }}>
+            Category
+          </Typography>
+          {gigs_category_name}
+        </div>
+      </Box>
+    </Card>
+>>>>>>> 3158989336036a9443c48a8277182b1baf2e5a3a
   );
 }
 

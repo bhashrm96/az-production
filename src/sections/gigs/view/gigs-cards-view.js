@@ -25,7 +25,11 @@ export default function GigsCardsView() {
         heading="Gigs Cards"
         links={[
           { name: 'Dashboard', href: paths.dashboard.root },
+<<<<<<< HEAD
           { name: 'Gigs' },
+=======
+          { name: 'Gigs', href: paths.dashboard.gigs.root },
+>>>>>>> 3158989336036a9443c48a8277182b1baf2e5a3a
         ]}
         // action={
         //   <Button

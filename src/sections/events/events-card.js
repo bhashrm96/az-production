@@ -17,6 +17,7 @@ import { AvatarShape } from 'src/assets/illustrations';
 
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
+<<<<<<< HEAD
 import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
 
@@ -25,10 +26,18 @@ import { paths } from 'src/routes/paths';
 export default function EventsCard({ events, index }) {
   const theme = useTheme();
   const router = useRouter();
+=======
+
+// ----------------------------------------------------------------------
+
+export default function EventsCard({ events }) {
+  const theme = useTheme();
+>>>>>>> 3158989336036a9443c48a8277182b1baf2e5a3a
 
   const { event_title, images, event_description, event_category_name, start_time, end_time, avatarUrl, event_date } = events;
 
   return (
+<<<<<<< HEAD
     <div onClick={() => router.push(paths.dashboard.events.details(index))}>
       <Card sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column' }}>
         <Box sx={{ position: 'relative' }}>
@@ -74,6 +83,53 @@ export default function EventsCard({ events, index }) {
         />
 
         {/* <Stack direction="row" alignItems="center" justifyContent="center" sx={{ mb: 2.5 }}>
+=======
+    <Card sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column' }}>
+      <Box sx={{ position: 'relative' }}>
+        <AvatarShape
+          sx={{
+            left: 0,
+            right: 0,
+            zIndex: 10,
+            mx: 'auto',
+            bottom: -26,
+            position: 'absolute',
+          }}
+        />
+
+        <Avatar
+          alt={event_title}
+          src={avatarUrl}
+          sx={{
+            width: 64,
+            height: 64,
+            zIndex: 11,
+            left: 0,
+            right: 0,
+            bottom: -32,
+            mx: 'auto',
+            position: 'absolute',
+          }}
+        />
+
+        <Image
+          src={images}
+          alt={images}
+          ratio="16/9"
+          overlay={alpha(theme.palette.grey[900], 0.48)}
+        />
+      </Box>
+
+      <ListItemText
+        sx={{ mt: 7, mb: 1 }}
+        primary={`${event_title} (${event_category_name})`}
+        secondary={event_description}
+        primaryTypographyProps={{ typography: 'subtitle1' }}
+        secondaryTypographyProps={{ component: 'span', mt: 0.5 }}
+      />
+
+      {/* <Stack direction="row" alignItems="center" justifyContent="center" sx={{ mb: 2.5 }}>
+>>>>>>> 3158989336036a9443c48a8277182b1baf2e5a3a
         {_socials.map((social) => (
           <IconButton
             key={social.name}
@@ -89,6 +145,7 @@ export default function EventsCard({ events, index }) {
         ))}
       </Stack> */}
 
+<<<<<<< HEAD
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <Box
@@ -105,6 +162,38 @@ export default function EventsCard({ events, index }) {
         </Box>
       </Card>
     </div>
+=======
+      <Divider sx={{ borderStyle: 'dashed' }} />
+
+      <Box
+        display="grid"
+        gridTemplateColumns="repeat(3, 1fr)"
+        sx={{ py: 3, typography: 'subtitle1' }}
+      >
+        <div>
+          <Typography variant="caption" component="div" sx={{ mb: 0.5, color: 'text.secondary' }}>
+            Event Date
+          </Typography>
+          {event_date.slice(0, 10)}
+        </div>
+
+        <div>
+          <Typography variant="caption" component="div" sx={{ mb: 0.5, color: 'text.secondary' }}>
+            Start Time
+          </Typography>
+
+          {start_time}
+        </div>
+
+        <div>
+          <Typography variant="caption" component="div" sx={{ mb: 0.5, color: 'text.secondary' }}>
+            End Time
+          </Typography>
+          {end_time}
+        </div>
+      </Box>
+    </Card>
+>>>>>>> 3158989336036a9443c48a8277182b1baf2e5a3a
   );
 }
 
