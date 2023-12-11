@@ -33,13 +33,8 @@ export default function GigsCardList() {
         md: 'repeat(3, 1fr)',
       }}
     >
-<<<<<<< HEAD
       {cards.map((gigs, index) => (
         <GigsCard key={gigs.id} gigs={gigs} index={index} />
-=======
-      {cards.map((gigs) => (
-        <GigsCard key={gigs.id} gigs={gigs} />
->>>>>>> 3158989336036a9443c48a8277182b1baf2e5a3a
       ))}
     </Box>
   );
