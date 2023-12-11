@@ -3,7 +3,7 @@ import { EventsProfileView } from 'src/sections/events/view';
 // ----------------------------------------------------------------------
 
 export const metadata = {
-  title: 'Dashboard: Events Profile',
+  title: 'Dashboard: Events Profiles',
 };
 
 export default function UserProfilePage() {
