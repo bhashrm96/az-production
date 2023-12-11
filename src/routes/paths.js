@@ -60,7 +60,7 @@ export const paths = {
     //   forgotPassword: `${ROOTS.AUTH}/amplify/forgot-password`,
     // },
     jwt: {
-      login: `${ROOTS.AUTH}/jwt/login`,
+      // login: `${ROOTS.AUTH}/jwt/login`,
       // register: `${ROOTS.AUTH}/jwt/register`,
     },
     // firebase: {
@@ -89,9 +89,12 @@ export const paths = {
   //     verify: `${ROOTS.AUTH_DEMO}/modern/verify`,
   //   },
   // },
+  login: {
+    root: '/login'
+  },
   // DASHBOARD
   dashboard: {
-    root: `${ROOTS.DASHBOARD}/user/list`,
+    root: `${ROOTS.DASHBOARD}`,
     // mail: `${ROOTS.DASHBOARD}/mail`,
     // chat: `${ROOTS.DASHBOARD}/chat`,
     // blank: `${ROOTS.DASHBOARD}/blank`,
@@ -110,13 +113,40 @@ export const paths = {
     user: {
       root: `${ROOTS.DASHBOARD}/user`,
       new: `${ROOTS.DASHBOARD}/user/new`,
-      list: `${ROOTS.DASHBOARD}/user/list`,
+      professionals: `${ROOTS.DASHBOARD}/user/professionals`,
+      producers: `${ROOTS.DASHBOARD}/user/producers`,
       cards: `${ROOTS.DASHBOARD}/user/cards`,
       profile: `${ROOTS.DASHBOARD}/user/profile`,
       account: `${ROOTS.DASHBOARD}/user/account`,
       edit: (id) => `${ROOTS.DASHBOARD}/user/${id}/edit`,
       demo: {
         edit: `${ROOTS.DASHBOARD}/user/${MOCK_ID}/edit`,
+      },
+    },
+    events: {
+      root: `${ROOTS.DASHBOARD}/events`,
+      details: (id) => `${ROOTS.DASHBOARD}/events/${id}`,
+      new: `${ROOTS.DASHBOARD}/events/new`,
+      list: `${ROOTS.DASHBOARD}/events/list`,
+      cards: `${ROOTS.DASHBOARD}/events/cards`,
+      profile: `${ROOTS.DASHBOARD}/events/profile`,
+      account: `${ROOTS.DASHBOARD}/events/account`,
+      edit: (id) => `${ROOTS.DASHBOARD}/events/${id}/edit`,
+      demo: {
+        edit: `${ROOTS.DASHBOARD}/events/${MOCK_ID}/edit`,
+      },
+    },
+    classified: {
+      root: `${ROOTS.DASHBOARD}/classified`,
+      details: (id) => `${ROOTS.DASHBOARD}/classified/${id}`,
+      new: `${ROOTS.DASHBOARD}/classified/new`,
+      list: `${ROOTS.DASHBOARD}/classified/list`,
+      cards: `${ROOTS.DASHBOARD}/classified/cards`,
+      profile: `${ROOTS.DASHBOARD}/classified/profile`,
+      account: `${ROOTS.DASHBOARD}/classified/account`,
+      edit: (id) => `${ROOTS.DASHBOARD}/classified/${id}/edit`,
+      demo: {
+        edit: `${ROOTS.DASHBOARD}/classified/${MOCK_ID}/edit`,
       },
     },
     vendor: {
@@ -132,7 +162,8 @@ export const paths = {
       },
     },
     gigs: {
-      root: `${ROOTS.DASHBOARD}/gigs`,
+      root: (id) => `${ROOTS.DASHBOARD}/gigs/${id}`,
+      details: (id) => `${ROOTS.DASHBOARD}/gigs/${id}`,
       new: `${ROOTS.DASHBOARD}/gigs/new`,
       list: `${ROOTS.DASHBOARD}/gigs/list`,
       cards: `${ROOTS.DASHBOARD}/gigs/cards`,
@@ -141,6 +172,7 @@ export const paths = {
       edit: (id) => `${ROOTS.DASHBOARD}/gigs/${id}/edit`,
       demo: {
         edit: `${ROOTS.DASHBOARD}/gigs/${MOCK_ID}/edit`,
+        details: `${ROOTS.DASHBOARD}/gigs/${MOCK_ID}`,
       },
     },
     moderator: {

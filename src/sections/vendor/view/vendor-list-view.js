@@ -196,7 +196,6 @@ export default function VendorListView() {
           links={[
             { name: 'Dashboard', href: paths.dashboard.root },
             { name: 'Vendor' },
-            { name: 'List' },
           ]}
           action={
             'moderator' in JSON.parse(localStorage.getItem("user"))
@@ -224,7 +223,7 @@ export default function VendorListView() {
         />
 
         <Card>
-          <Tabs
+          {/* <Tabs
             value={filters.status}
             onChange={handleFilterStatus}
             sx={{
@@ -264,16 +263,16 @@ export default function VendorListView() {
                 }
               />
             ))}
-          </Tabs>
+          </Tabs> */}
 
-          <VendorTableToolbar
+          {/* <VendorTableToolbar
             filters={filters}
             onFilters={handleFilters}
             //
             roleOptions={_roles}
-          />
+          /> */}
 
-          {canReset && (
+          {/* {canReset && (
             <VendorTableFiltersResult
               filters={filters}
               onFilters={handleFilters}
@@ -283,7 +282,7 @@ export default function VendorListView() {
               results={dataFiltered.length}
               sx={{ p: 2.5, pt: 0 }}
             />
-          )}
+          )} */}
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <TableSelectedAction

@@ -242,9 +242,11 @@ export default function UserNewEditForm({ currentUser }) {
                 defaultValue="Select Page"
                 native={false}
               >
-                <MenuItem value="User">User</MenuItem>
-                <MenuItem value="Vendor">Vendor</MenuItem>
-                <MenuItem value="Film Professional">Film Professional</MenuItem>
+                <MenuItem value="1">Users</MenuItem>
+                <MenuItem value="2">Vendors</MenuItem>
+                <MenuItem value="3">Gigs</MenuItem>
+                <MenuItem value="5">Events</MenuItem>
+                <MenuItem value="6">Classified</MenuItem>
               </RHFSelect>
 
             </Box>

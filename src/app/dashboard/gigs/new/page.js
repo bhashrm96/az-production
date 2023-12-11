@@ -1,4 +1,4 @@
-import { ModeratorCreateView } from 'src/sections/moderator/view';
+import { GigsCreateView } from 'src/sections/gigs/view';
 
 // ----------------------------------------------------------------------
 
@@ -7,5 +7,5 @@ export const metadata = {
 };
 
 export default function UserCreatePage() {
-  return <ModeratorCreateView />;
+  return <GigsCreateView />;
 }

@@ -23,7 +23,7 @@ const METHODS = [
   {
     id: 'jwt',
     label: 'Jwt',
-    path: paths.auth.jwt.login,
+    path: paths.login.root,
     icon: '/assets/icons/auth/ic_jwt.svg',
   },
   // {
@@ -53,15 +53,15 @@ export default function AuthClassicLayout({ children, image, title }) {
 
   const mdUp = useResponsive('up', 'md');
 
-  const renderLogo = (
-    <Logo
-      sx={{
-        zIndex: 9,
-        position: 'absolute',
-        m: { xs: 2, md: 5 },
-      }}
-    />
-  );
+  // const renderLogo = (
+  //   <Logo
+  //     sx={{
+  //       zIndex: 9,
+  //       position: 'absolute',
+  //       m: { xs: 2, md: 5 },
+  //     }}
+  //   />
+  // );
 
   const renderContent = (
     <Stack
@@ -94,24 +94,25 @@ export default function AuthClassicLayout({ children, image, title }) {
         }),
       }}
     >
-      <Typography variant="h3" sx={{ maxWidth: 480, textAlign: 'center' }}>
+      {/* <Typography variant="h3" sx={{ maxWidth: 480, textAlign: 'center' }}>
         {title || 'Hi, Welcome back'}
-      </Typography>
+      </Typography> */}
 
       <Box
         component="img"
         alt="auth"
-        src={image || '/assets/illustrations/illustration_dashboard.png'}
+        src={image || '/logo/logo-main.png'}
         sx={{
           maxWidth: {
             xs: 480,
-            lg: 560,
-            xl: 720,
+            lg: 520,
+            xl: 520,
           },
+          backgroundImage: 'url("/")'
         }}
       />
 
-      <Stack direction="row" spacing={2}>
+      {/* <Stack direction="row" spacing={2}>
         {METHODS.map((option) => (
           <Tooltip key={option.label} title={option.label}>
             <Link component={RouterLink} href={option.path}>
@@ -130,7 +131,7 @@ export default function AuthClassicLayout({ children, image, title }) {
             </Link>
           </Tooltip>
         ))}
-      </Stack>
+      </Stack> */}
     </Stack>
   );
 
@@ -142,7 +143,7 @@ export default function AuthClassicLayout({ children, image, title }) {
         minHeight: '100vh',
       }}
     >
-      {renderLogo}
+      {/* {renderLogo} */}
 
       {mdUp && renderSection}
 

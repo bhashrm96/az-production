@@ -23,18 +23,18 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 // ----------------------------------------------------------------------
 
 const OPTIONS = [
-  {
-    label: 'Home',
-    linkTo: '/',
-  },
-  {
-    label: 'Profile',
-    linkTo: paths.dashboard.user.profile,
-  },
-  {
-    label: 'Settings',
-    linkTo: paths.dashboard.user.account,
-  },
+  // {
+  //   label: 'Home',
+  //   linkTo: '/',
+  // },
+  // {
+  //   label: 'Profile',
+  //   linkTo: paths.dashboard.user.profile,
+  // },
+  // {
+  //   label: 'Settings',
+  //   linkTo: paths.dashboard.user.account,
+  // },
 ];
 
 // ----------------------------------------------------------------------
@@ -54,7 +54,7 @@ export default function AccountPopover() {
     try {
       await logout();
       popover.onClose();
-      router.replace('/');
+      router.replace('/login');
     } catch (error) {
       console.error(error);
       enqueueSnackbar('Unable to logout!', { variant: 'error' });
@@ -86,25 +86,25 @@ export default function AccountPopover() {
       >
         <Avatar
           src={user?.photoURL}
-          alt={user?.displayName}
+          alt={JSON.parse(localStorage.getItem("user")).moderator ? JSON.parse(localStorage.getItem("user")).moderator.firstname : JSON.parse(localStorage.getItem("user")).name}
           sx={{
             width: 36,
             height: 36,
             border: (theme) => `solid 2px ${theme.palette.background.default}`,
           }}
         >
-          {user?.displayName.charAt(0).toUpperCase()}
+          {JSON.parse(localStorage.getItem("user")).moderator ? JSON.parse(localStorage.getItem("user")).moderator.firstname.charAt(0).toUpperCase() : JSON.parse(localStorage.getItem("user")).name.charAt(0).toUpperCase()}
         </Avatar>
       </IconButton>
 
       <CustomPopover open={popover.open} onClose={popover.onClose} sx={{ width: 200, p: 0 }}>
         <Box sx={{ p: 2, pb: 1.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {user?.displayName}
+            {JSON.parse(localStorage.getItem("user")).moderator ? JSON.parse(localStorage.getItem("user")).moderator.firstname : JSON.parse(localStorage.getItem("user")).name}
           </Typography>
 
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {user?.email}
+            {JSON.parse(localStorage.getItem("user")).moderator ? JSON.parse(localStorage.getItem("user")).moderator.email : JSON.parse(localStorage.getItem("user")).email}
           </Typography>
         </Box>
 

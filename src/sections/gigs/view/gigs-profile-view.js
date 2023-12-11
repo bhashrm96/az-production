@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Card from '@mui/material/Card';
@@ -8,6 +8,7 @@ import Container from '@mui/material/Container';
 import Tabs, { tabsClasses } from '@mui/material/Tabs';
 
 import { paths } from 'src/routes/paths';
+import axios from 'axios';
 
 import { useMockedGigs } from 'src/hooks/use-mocked-gigs';
 
@@ -23,34 +24,18 @@ import ProfileFriends from '../profile-friends';
 import ProfileGallery from '../profile-gallery';
 import ProfileFollowers from '../profile-followers';
 
-// ----------------------------------------------------------------------
+export default function GigsProfileView({ id }) {
+  const [data, setData] = useState({})
+  useEffect(() => {
+    axios.get("https://dev-azproduction-api.flynautstaging.com/gigs/view_all_gigs", {
+      headers: {
+        Authorization: sessionStorage.getItem('accessToken')
+      }
+    }).then((res) => {
 
-const TABS = [
-  {
-    value: 'profile',
-    label: 'Profile',
-    icon: <Iconify icon="solar:gigs-id-bold" width={24} />,
-  },
-  {
-    value: 'followers',
-    label: 'Followers',
-    icon: <Iconify icon="solar:heart-bold" width={24} />,
-  },
-  {
-    value: 'friends',
-    label: 'Friends',
-    icon: <Iconify icon="solar:gigss-group-rounded-bold" width={24} />,
-  },
-  {
-    value: 'gallery',
-    label: 'Gallery',
-    icon: <Iconify icon="solar:gallery-wide-bold" width={24} />,
-  },
-];
-
-// ----------------------------------------------------------------------
-
-export default function GigsProfileView() {
+      setData(res.data.data[id]);
+    })
+  }, [])
   const settings = useSettingsContext();
 
   const { gigs } = useMockedGigs();
@@ -73,8 +58,8 @@ export default function GigsProfileView() {
         heading="Profile"
         links={[
           { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'Gigs', href: paths.dashboard.modertator.root },
-          { name: gigs?.displayName },
+          { name: 'Gigs', href: paths.dashboard.gigs.cards },
+          { name: data.gigs_title },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
@@ -88,49 +73,14 @@ export default function GigsProfileView() {
         }}
       >
         <ProfileCover
-          role={_gigsAbout.role}
-          name={gigs?.displayName}
+          // role={_gigsAbout.role}
+          name={data.gigs_title}
           avatarUrl={gigs?.photoURL}
-          coverUrl={_gigsAbout.coverUrl}
+          coverUrl={data.image}
         />
-
-        <Tabs
-          value={currentTab}
-          onChange={handleChangeTab}
-          sx={{
-            width: 1,
-            bottom: 0,
-            zIndex: 9,
-            position: 'absolute',
-            bgcolor: 'background.paper',
-            [`& .${tabsClasses.flexContainer}`]: {
-              pr: { md: 3 },
-              justifyContent: {
-                sm: 'center',
-                md: 'flex-end',
-              },
-            },
-          }}
-        >
-          {TABS.map((tab) => (
-            <Tab key={tab.value} value={tab.value} icon={tab.icon} label={tab.label} />
-          ))}
-        </Tabs>
       </Card>
 
-      {currentTab === 'profile' && <ProfileHome info={_gigsAbout} posts={_gigsFeeds} />}
-
-      {currentTab === 'followers' && <ProfileFollowers followers={_gigsFollowers} />}
-
-      {currentTab === 'friends' && (
-        <ProfileFriends
-          friends={_gigsFriends}
-          searchFriends={searchFriends}
-          onSearchFriends={handleSearchFriends}
-        />
-      )}
-
-      {currentTab === 'gallery' && <ProfileGallery gallery={_gigsGallery} />}
+      <ProfileHome info={data} posts={_gigsFeeds} />
     </Container>
   );
 }

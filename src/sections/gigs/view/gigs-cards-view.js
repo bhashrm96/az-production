@@ -25,19 +25,18 @@ export default function GigsCardsView() {
         heading="Gigs Cards"
         links={[
           { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'Gigs', href: paths.dashboard.gigs.root },
-          { name: 'Cards' },
+          { name: 'Gigs' },
         ]}
-        action={
-          <Button
-            component={RouterLink}
-            href={paths.dashboard.gigs.new}
-            variant="contained"
-            startIcon={<Iconify icon="mingcute:add-line" />}
-          >
-            New Gigs
-          </Button>
-        }
+        // action={
+        //   <Button
+        //     component={RouterLink}
+        //     href={paths.dashboard.gigs.new}
+        //     variant="contained"
+        //     startIcon={<Iconify icon="mingcute:add-line" />}
+        //   >
+        //     New Gigs
+        //   </Button>
+        // }
         sx={{ mb: { xs: 3, md: 5 } }}
       />
 

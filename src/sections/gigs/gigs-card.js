@@ -17,60 +17,64 @@ import { AvatarShape } from 'src/assets/illustrations';
 
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
+import { useRouter } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
 
 // ----------------------------------------------------------------------
 
-export default function GigsCard({ gigs }) {
+export default function GigsCard({ gigs, index }) {
   const theme = useTheme();
+  const router = useRouter();
 
-  const { name, coverUrl, role, totalFollowers, totalPosts, avatarUrl, totalFollowing } = gigs;
+  const { first_name, image, gigs_title, gigs_category_name, position, role, expertise, totalFollowers, totalPosts, avatarUrl, totalFollowing } = gigs;
 
   return (
-    <Card sx={{ textAlign: 'center' }}>
-      <Box sx={{ position: 'relative' }}>
-        <AvatarShape
-          sx={{
-            left: 0,
-            right: 0,
-            zIndex: 10,
-            mx: 'auto',
-            bottom: -26,
-            position: 'absolute',
-          }}
+    <div onClick={() => router.push(paths.dashboard.gigs.details(index))}>
+      <Card sx={{ textAlign: 'center' }}>
+        <Box sx={{ position: 'relative' }}>
+          {/* <AvatarShape
+            sx={{
+              left: 0,
+              right: 0,
+              zIndex: 10,
+              mx: 'auto',
+              bottom: -26,
+              position: 'absolute',
+            }}
+          />
+
+          <Avatar
+            alt={first_name}
+            src={first_name}
+            sx={{
+              width: 64,
+              height: 64,
+              zIndex: 11,
+              left: 0,
+              right: 0,
+              bottom: -32,
+              mx: 'auto',
+              position: 'absolute',
+            }}
+          /> */}
+
+          <Image
+            src={image}
+            alt={image}
+            ratio="16/9"
+            overlay={alpha(theme.palette.grey[900], 0.48)}
+          />
+        </Box>
+
+        <ListItemText
+          sx={{ mt: 7, mb: 1 }}
+          primary={gigs_title}
+          secondary={role}
+          primaryTypographyProps={{ typography: 'subtitle1' }}
+          secondaryTypographyProps={{ component: 'span', mt: 0.5 }}
         />
 
-        <Avatar
-          alt={name}
-          src={avatarUrl}
-          sx={{
-            width: 64,
-            height: 64,
-            zIndex: 11,
-            left: 0,
-            right: 0,
-            bottom: -32,
-            mx: 'auto',
-            position: 'absolute',
-          }}
-        />
-
-        <Image
-          src={coverUrl}
-          alt={coverUrl}
-          ratio="16/9"
-          overlay={alpha(theme.palette.grey[900], 0.48)}
-        />
-      </Box>
-
-      <ListItemText
-        sx={{ mt: 7, mb: 1 }}
-        primary={name}
-        secondary={role}
-        primaryTypographyProps={{ typography: 'subtitle1' }}
-        secondaryTypographyProps={{ component: 'span', mt: 0.5 }}
-      />
-
-      <Stack direction="row" alignItems="center" justifyContent="center" sx={{ mb: 2.5 }}>
+        {/* <Stack direction="row" alignItems="center" justifyContent="center" sx={{ mb: 2.5 }}>
         {_socials.map((social) => (
           <IconButton
             key={social.name}
@@ -84,38 +88,39 @@ export default function GigsCard({ gigs }) {
             <Iconify icon={social.icon} />
           </IconButton>
         ))}
-      </Stack>
+      </Stack> */}
 
-      <Divider sx={{ borderStyle: 'dashed' }} />
+        <Divider sx={{ borderStyle: 'dashed' }} />
 
-      <Box
-        display="grid"
-        gridTemplateColumns="repeat(3, 1fr)"
-        sx={{ py: 3, typography: 'subtitle1' }}
-      >
-        <div>
-          <Typography variant="caption" component="div" sx={{ mb: 0.5, color: 'text.secondary' }}>
-            Follower
-          </Typography>
-          {fShortenNumber(totalFollowers)}
-        </div>
+        <Box
+          display="grid"
+          gridTemplateColumns="repeat(3, 1fr)"
+          sx={{ py: 3, typography: 'subtitle1' }}
+        >
+          <div>
+            <Typography variant="caption" component="div" sx={{ mb: 0.5, color: 'text.secondary' }}>
+              Position
+            </Typography>
+            {position}
+          </div>
 
-        <div>
-          <Typography variant="caption" component="div" sx={{ mb: 0.5, color: 'text.secondary' }}>
-            Following
-          </Typography>
+          <div>
+            <Typography variant="caption" component="div" sx={{ mb: 0.5, color: 'text.secondary' }}>
+              Expertise
+            </Typography>
 
-          {fShortenNumber(totalFollowing)}
-        </div>
+            {expertise}
+          </div>
 
-        <div>
-          <Typography variant="caption" component="div" sx={{ mb: 0.5, color: 'text.secondary' }}>
-            Total Post
-          </Typography>
-          {fShortenNumber(totalPosts)}
-        </div>
-      </Box>
-    </Card>
+          <div>
+            <Typography variant="caption" component="div" sx={{ mb: 0.5, color: 'text.secondary' }}>
+              Category
+            </Typography>
+            {gigs_category_name}
+          </div>
+        </Box>
+      </Card>
+    </div>
   );
 }
 

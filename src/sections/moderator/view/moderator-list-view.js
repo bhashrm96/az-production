@@ -194,7 +194,6 @@ export default function ModeratorListView() {
           links={[
             { name: 'Dashboard', href: paths.dashboard.root },
             { name: 'Moderator' },
-            { name: 'List' },
           ]}
           action={
             'moderator' in JSON.parse(localStorage.getItem("user"))
@@ -222,7 +221,7 @@ export default function ModeratorListView() {
         />
 
         <Card>
-          <Tabs
+          {/* <Tabs
             value={filters.status}
             onChange={handleFilterStatus}
             sx={{
@@ -262,16 +261,16 @@ export default function ModeratorListView() {
                 }
               />
             ))}
-          </Tabs>
+          </Tabs> */}
 
-          <ModeratorTableToolbar
+          {/* <ModeratorTableToolbar
             filters={filters}
             onFilters={handleFilters}
             //
             roleOptions={_roles}
-          />
+          /> */}
 
-          {canReset && (
+          {/* {canReset && (
             <ModeratorTableFiltersResult
               filters={filters}
               onFilters={handleFilters}
@@ -281,7 +280,7 @@ export default function ModeratorListView() {
               results={dataFiltered.length}
               sx={{ p: 2.5, pt: 0 }}
             />
-          )}
+          )} */}
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <TableSelectedAction

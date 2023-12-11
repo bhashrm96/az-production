@@ -276,15 +276,16 @@ export default function VendorNewEditForm({ currentVendor }) {
               {permissions.map((permission, index) => (
                 <>
                   <RHFSelect
-                    onChange={onPageChange}
+                    onChange={onRoleChange}
                     name="page"
                     defaultValue="Select Page"
-                    index={index}
                     native={false}
                   >
-                    <MenuItem value={1}>Users</MenuItem>
-                    <MenuItem value={2}>Vendors</MenuItem>
-                    <MenuItem value={3}>Gigs</MenuItem>
+                    <MenuItem value="1">Users</MenuItem>
+                    <MenuItem value="2">Vendors</MenuItem>
+                    <MenuItem value="3">Gigs</MenuItem>
+                    <MenuItem value="5">Events</MenuItem>
+                    <MenuItem value="6">Classified</MenuItem>
                   </RHFSelect>
                   <RHFSelect
                     onChange={onPermissionChange}

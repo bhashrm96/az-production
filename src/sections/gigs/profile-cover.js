@@ -17,7 +17,7 @@ export default function ProfileCover({ name, avatarUrl, role, coverUrl }) {
     <Box
       sx={{
         ...bgGradient({
-          color: alpha(theme.palette.primary.darker, 0.8),
+          color: alpha(theme.palette.primary.darker, 0.3),
           imgUrl: coverUrl,
         }),
         height: 1,
@@ -34,7 +34,7 @@ export default function ProfileCover({ name, avatarUrl, role, coverUrl }) {
           position: { md: 'absolute' },
         }}
       >
-        <Avatar
+        {/* <Avatar
           src={avatarUrl}
           alt={name}
           sx={{
@@ -43,7 +43,7 @@ export default function ProfileCover({ name, avatarUrl, role, coverUrl }) {
             height: { xs: 64, md: 128 },
             border: `solid 2px ${theme.palette.common.white}`,
           }}
-        />
+        /> */}
 
         <ListItemText
           sx={{
@@ -55,6 +55,7 @@ export default function ProfileCover({ name, avatarUrl, role, coverUrl }) {
           secondary={role}
           primaryTypographyProps={{
             typography: 'h4',
+            color: `${!coverUrl ? 'black' : 'inherit'}`
           }}
           secondaryTypographyProps={{
             mt: 0.5,

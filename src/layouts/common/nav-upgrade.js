@@ -23,7 +23,7 @@ export default function NavUpgrade() {
         textAlign: 'center',
       }}
     >
-      <Stack alignItems="center">
+      {/* <Stack alignItems="center">
         <Box sx={{ position: 'relative' }}>
           <Avatar src={user?.photoURL} alt={user?.displayName} sx={{ width: 48, height: 48 }} />
           <Label
@@ -55,7 +55,7 @@ export default function NavUpgrade() {
         <Button variant="contained" href={paths.minimalUI} target="_blank" rel="noopener">
           Upgrade to Pro
         </Button>
-      </Stack>
+      </Stack> */}
     </Stack>
   );
 }
