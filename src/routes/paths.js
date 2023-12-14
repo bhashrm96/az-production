@@ -149,6 +149,19 @@ export const paths = {
         edit: `${ROOTS.DASHBOARD}/classified/${MOCK_ID}/edit`,
       },
     },
+    feeds: {
+      root: `${ROOTS.DASHBOARD}/feeds`,
+      details: (id) => `${ROOTS.DASHBOARD}/feeds/${id}`,
+      new: `${ROOTS.DASHBOARD}/feeds/new`,
+      list: `${ROOTS.DASHBOARD}/feeds/list`,
+      cards: `${ROOTS.DASHBOARD}/feeds/cards`,
+      profile: `${ROOTS.DASHBOARD}/feeds/profile`,
+      account: `${ROOTS.DASHBOARD}/feeds/account`,
+      edit: (id) => `${ROOTS.DASHBOARD}/feeds/${id}/edit`,
+      demo: {
+        edit: `${ROOTS.DASHBOARD}/feeds/${MOCK_ID}/edit`,
+      },
+    },
     vendor: {
       root: `${ROOTS.DASHBOARD}/vendor`,
       new: `${ROOTS.DASHBOARD}/vendor/new`,

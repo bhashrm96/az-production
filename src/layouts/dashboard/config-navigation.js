@@ -176,6 +176,19 @@ export function useNavData() {
             //   { title: t('account'), path: paths.dashboard.moderator.account },
             // ],
           },
+          {
+            title: t('feeds'),
+            path: paths.dashboard.feeds.cards,
+            icon: ICONS.user,
+            id: 6
+            // children: [
+            //   { title: t('profile'), path: paths.dashboard.moderator.root },
+            //   { title: t('cards'), path: paths.dashboard.moderator.cards },
+            //   { title: t('create'), path: paths.dashboard.moderator.new },
+            //   { title: t('edit'), path: paths.dashboard.moderator.demo.edit },
+            //   { title: t('account'), path: paths.dashboard.moderator.account },
+            // ],
+          },
           // PRODUCT
           // {
           //   title: t('product'),

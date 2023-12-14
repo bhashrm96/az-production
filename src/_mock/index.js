@@ -9,6 +9,7 @@ export * from './_moderator';
 export * from './_vendor';
 export * from './_events';
 export * from './_classified';
+export * from './_feeds';
 export * from './_gigs';
 export * from './_tour';
 export * from './_blog';
