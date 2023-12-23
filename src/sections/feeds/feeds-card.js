@@ -26,13 +26,49 @@ export default function FeedsCard({ feeds, index }) {
   const theme = useTheme();
   const router = useRouter();
 
-  const { title, images, description, price, avatarUrl } = feeds;
+  const { title, images, description, created_at, avatarUrl } = feeds;
 
   return (
     <div
     // onClick={() => router.push(paths.dashboard.feeds.details(index))}
     >
       <Card sx={{ textAlign: 'center' }}>
+
+        <Box
+          display="grid"
+          gridTemplateColumns="repeat(1, 1fr)"
+          sx={{ py: 2, px: 2, typography: 'subtitle1', display: 'flex', alignItems: "center", justifyContent: 'start' }}
+        >
+          <Avatar
+            alt={title ? title : "title"}
+            src={avatarUrl}
+            sx={{
+              width: 40,
+              height: 40,
+              zIndex: 11,
+            }}
+          />
+          <div style={{ marginLeft: "0.5rem", display: 'flex', flexDirection: "column" }}>
+            <small style={{ textAlign: "left" }}>Username</small>
+            <small style={{ color: "grey", textAlign: "left" }}>{new Intl.DateTimeFormat('en-US', {
+              day: 'numeric',
+              month: 'short',
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: true
+            }).format(new Date(Date.parse(created_at)))}</small>
+          </div>
+        </Box>
+
+        <ListItemText
+          sx={{ mb: 1, px: 2 }}
+          // primary={title ? title : "title"}
+          secondary={description ? description : "description"}
+          primaryTypographyProps={{ typography: 'subtitle1', textAlign: "left" }}
+          secondaryTypographyProps={{ component: 'span', mt: 0.5, textAlign: "left" }}
+        />
+
         <Box sx={{ position: 'relative' }}>
           {/* <AvatarShape
             sx={{
@@ -53,14 +89,6 @@ export default function FeedsCard({ feeds, index }) {
           />
         </Box>
 
-        <ListItemText
-          sx={{ mt: 7, mb: 1 }}
-          primary={title ? title : "title"}
-          secondary={description ? description : "description"}
-          primaryTypographyProps={{ typography: 'subtitle1' }}
-          secondaryTypographyProps={{ component: 'span', mt: 0.5 }}
-        />
-
         {/* <Stack direction="row" alignItems="center" justifyContent="center" sx={{ mb: 2.5 }}>
         {_socials.map((social) => (
           <IconButton
@@ -76,25 +104,6 @@ export default function FeedsCard({ feeds, index }) {
           </IconButton>
         ))}
       </Stack> */}
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        <Box
-          display="grid"
-          gridTemplateColumns="repeat(1, 1fr)"
-          sx={{ py: 3, typography: 'subtitle1', display: 'flex', alignItems: "center", justifyContent: 'center' }}
-        >
-          <Avatar
-            alt={title ? title : "title"}
-            src={avatarUrl}
-            sx={{
-              width: 30,
-              height: 30,
-              zIndex: 11,
-            }}
-          />
-          <div style={{ marginLeft: '0.5rem' }}>username</div>
-        </Box>
       </Card>
     </div>
   );
