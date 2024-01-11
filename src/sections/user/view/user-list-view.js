@@ -127,11 +127,15 @@ export default function UserListView() {
 
   const [permissions, setPermissions] = useState([]);
 
+  const [isUpdate, setIsUpdate] = useState(false);
+
   useEffect(() => {
     axios.get("https://dev-azproduction-api.flynautstaging.com/admin/all-users").then((res) => {
       setTableData(res.data);
     })
+  }, [isUpdate])
 
+  useEffect(() => {
     if ('moderator' in JSON.parse(localStorage.getItem("user"))) {
       const data = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 1)
       setPermissions(data)
@@ -335,6 +339,7 @@ export default function UserListView() {
                         onSelectRow={() => table.onSelectRow(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}
                         onEditRow={() => handleEditRow(row.id)}
+                        setIsUpdate={setIsUpdate}
                       />
                     ))}
 

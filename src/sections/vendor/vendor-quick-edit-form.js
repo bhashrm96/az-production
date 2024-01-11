@@ -13,6 +13,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
+import axios from 'axios';
 
 import { countries } from 'src/assets/data';
 import { USER_STATUS_OPTIONS } from 'src/_mock';
@@ -23,10 +24,21 @@ import FormProvider, { RHFSelect, RHFTextField, RHFAutocomplete } from 'src/comp
 
 // ----------------------------------------------------------------------
 
-export default function VendorQuickEditForm({ currentVendor, open, onClose }) {
+export default function VendorQuickEditForm({ currentVendor, open, onClose, setIsUpdate }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const [permissions, setPermissions] = useState([]);
+
+  const [gender, setGender] = useState(currentVendor.gender || "");
+  const [category, setCategory] = useState(currentVendor.category || "");
+
+  const onRoleChange = (value, index) => {
+    setGender(value.target.value);
+  };
+
+  const onCategoryChange = (value, index) => {
+    setCategory(value.target.value);
+  };
 
   const handleAddPermission = () => {
     const newPermission = { page_id: '', permission_id: '' };
@@ -53,35 +65,45 @@ export default function VendorQuickEditForm({ currentVendor, open, onClose }) {
     setPermissions(updatedPermissions);
   };
 
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    if (open) {
+      const getCategories = async () => {
+        const response = await axios.get('https://dev-azproduction-api.flynautstaging.com/auth/vendors-categories')
+        setCategories(response.data.data);
+      }
+      getCategories();
+    }
+  }, [open])
+
   const NewVendorSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
+    first_name: Yup.string().required('First name is required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    phoneNumber: Yup.string().required('Phone number is required'),
-    address: Yup.string().required('Address is required'),
-    country: Yup.string().required('Country is required'),
-    company: Yup.string().required('Company is required'),
-    state: Yup.string().required('State is required'),
-    city: Yup.string().required('City is required'),
-    role: Yup.string().required('Role is required'),
+    phone_no: Yup.string().required('Phone number is required'),
+    last_name: Yup.string().required('Last name is required'),
+    fax_number: Yup.string().required('Fax number is required'),
+    business_name: Yup.string().required('Business name is required'),
+    business_website: Yup.string().required('Business website is required'),
+    company_email: Yup.string().required('Company email is required'),
+    company_phone_no: Yup.string().required('Company phone number is required'),
+    about_company: Yup.string().required('Company description is required')
   });
 
   const defaultValues = useMemo(
     () => ({
-      firstname: currentVendor?.firstname || '',
-      email: currentVendor?.email || '',
-      phone: currentVendor?.phone || '',
-      lastname: currentVendor?.lastname || '',
-      company_address: currentVendor?.company_address || '',
-      dob: currentVendor?.dob || '',
-      city: currentVendor?.city || '',
-      state: currentVendor?.state || '',
-      zipcode: currentVendor?.zipcode || '',
-      company_name: currentVendor?.company_name || '',
-      website: currentVendor?.website || '',
-      company_about: currentVendor?.company_about || '',
-      position: currentVendor?.position || '',
+      first_name: currentVendor.first_name || '',
+      last_name: currentVendor.last_name || '',
+      email: currentVendor.email || '',
+      phone_no: currentVendor.phone_no || '',
+      business_name: currentVendor.business_name || '',
+      business_website: currentVendor.business_website || '',
+      company_email: currentVendor.company_email || '',
+      company_phone_no: currentVendor.company_phone_no || '',
+      about_company: currentVendor.about_company || '',
+      fax_number: currentVendor.fax_number || ''
     }),
-    [currentVendor]
+    []
   );
 
   const methods = useForm({
@@ -97,7 +119,13 @@ export default function VendorQuickEditForm({ currentVendor, open, onClose }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      let body = {
+        ...data,
+        category,
+        gender
+      }
+      await axios.put(`https://dev-azproduction-api.flynautstaging.com/admin/edit_vendor/${currentVendor.id}`, body);
+      setIsUpdate(pValue => !pValue)
       reset();
       onClose();
       enqueueSnackbar('Update success!');
@@ -121,10 +149,6 @@ export default function VendorQuickEditForm({ currentVendor, open, onClose }) {
         <DialogTitle>Quick Update</DialogTitle>
 
         <DialogContent>
-          <Alert variant="outlined" severity="info" sx={{ mb: 3 }}>
-            Account is waiting for confirmation
-          </Alert>
-
           <Box
             rowGap={3}
             columnGap={2}
@@ -133,91 +157,44 @@ export default function VendorQuickEditForm({ currentVendor, open, onClose }) {
               xs: 'repeat(1, 1fr)',
               sm: 'repeat(2, 1fr)',
             }}
-          >
-
-            <RHFTextField name="firstname" label="First Name" />
-            <RHFTextField name="lastname" label="Last Name" />
-            <RHFTextField name="email" label="Email Address" />
-            <RHFTextField name="phone" label="Phone Number" />
-
-            {/* <RHFAutocomplete
-              name="country"
-              label="Country"
-              options={countries.map((country) => country.label)}
-              getOptionLabel={(option) => option}
-              renderOption={(props, option) => {
-                const { code, label, phone } = countries.filter(
-                  (country) => country.label === option
-                )[0];
-
-                if (!label) {
-                  return null;
-                }
-
-                return (
-                  <li {...props} key={label}>
-                    <Iconify
-                      key={label}
-                      icon={`circle-flags:${code.toLowerCase()}`}
-                      width={28}
-                      sx={{ mr: 1 }}
-                    />
-                    {label} ({code}) +{phone}
-                  </li>
-                );
-              }}
-            />
-
-            <RHFTextField name="state" label="State/Region" />
-            <RHFTextField name="city" label="City" />
-            <RHFTextField name="address" label="Address" />
-            <RHFTextField name="zipCode" label="Zip/Code" />
-            <RHFTextField name="company" label="Company" />
-            <RHFTextField name="role" label="Role" /> */}
-          </Box>
-          <Box
-            rowGap={3}
-            columnGap={2}
-            display="grid"
-            gridTemplateColumns={{
-              xs: 'repeat(1, 1fr)',
-              sm: 'repeat(3, 1fr)',
+            sx={{
+              mt: 3
             }}
-            sx={permissions.length > 0 ? { mt: 2 } : { mt: 0 }}
           >
-            {permissions.map((permission, index) => (
-              <>
-                <RHFSelect
-                  onChange={onRoleChange}
-                  name="page"
-                  defaultValue="Select Page"
-                  native={false}
-                >
-                  <MenuItem value="1">Users</MenuItem>
-                  <MenuItem value="2">Vendors</MenuItem>
-                  <MenuItem value="3">Gigs</MenuItem>
-                  <MenuItem value="5">Events</MenuItem>
-                  <MenuItem value="6">Classified</MenuItem>
-                </RHFSelect>
-                <RHFSelect
-                  name="permission"
-                  defaultValue="Select Permission"
-                  index={index}
-                  native={false}
-                >
-                  <MenuItem value={1}>Read Only</MenuItem>
-                  <MenuItem value={2}>Full Access</MenuItem>
-                  <MenuItem value={3}>Deny</MenuItem>
-                </RHFSelect>
-                <Button onClick={() => handleDeletePermission(index)}>
-                  Delete
-                </Button>
-              </>
-            ))}
+            <RHFTextField name="first_name" label="First Name" />
+            <RHFTextField name="last_name" label="Last Name" />
+            <RHFTextField type={'email'} name="email" label="Email Address" />
+            <RHFTextField type={'number'} name="phone_no" label="Phone Number" />
+            <RHFTextField name="business_name" label="Business Name" />
+            <RHFTextField name="business_website" label="Business Website" />
+            <RHFTextField type={'email'} name="company_email" label="Company Email Address" />
+            <RHFTextField type={'number'} name="company_phone_no" label="Company Phone Number" />
+            <RHFTextField name="about_company" label="About Company" />
+            <RHFTextField type={'number'} name="fax_number" label="Fax Number" />
+
+            <RHFSelect
+              onChange={onRoleChange}
+              name="gender"
+              defaultValue={currentVendor.gender || ""}
+              native={false}
+            >
+              <MenuItem value="male">Male</MenuItem>
+              <MenuItem value="female">Female</MenuItem>
+            </RHFSelect>
+
+            <RHFSelect
+              onChange={onCategoryChange}
+              name="category"
+              defaultValue={currentVendor.category || ""}
+              native={false}
+            >
+              {categories.map(x => {
+                return (
+                  <MenuItem value={x.id}>{x.categoryname}</MenuItem>
+                )
+              })}
+            </RHFSelect>
           </Box>
-          <Button sx={{ mt: 2 }} onClick={handleAddPermission} variant="soft" color="success">
-            Add Permission
-          </Button>
         </DialogContent>
 
         <DialogActions>

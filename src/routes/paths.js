@@ -164,6 +164,7 @@ export const paths = {
     },
     vendor: {
       root: `${ROOTS.DASHBOARD}/vendor`,
+      details: (id) => `${ROOTS.DASHBOARD}/vendor/${id}`,
       new: `${ROOTS.DASHBOARD}/vendor/new`,
       list: `${ROOTS.DASHBOARD}/vendor/list`,
       cards: `${ROOTS.DASHBOARD}/vendor/cards`,

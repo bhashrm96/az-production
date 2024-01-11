@@ -25,7 +25,7 @@ export default function ModeratorCreateView() {
           },
           {
             name: 'Moderator',
-            href: paths.dashboard.moderator.root,
+            href: paths.dashboard.moderator.list,
           },
           { name: 'New moderator' },
         ]}

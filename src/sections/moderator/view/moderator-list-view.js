@@ -126,15 +126,20 @@ export default function ModeratorListView() {
 
   const [permissions, setPermissions] = useState([]);
 
+  const [isUpdate, setIsUpdate] = useState(false);
+
   useEffect(() => {
-    axios.get("https://dev-azproduction-api.flynautstaging.com/admin/moderators").then((res) => {
-      setTableData(res.data);
-    })
     if ('moderator' in JSON.parse(localStorage.getItem("user"))) {
       const data = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 4)
       setPermissions(data)
     }
   }, [])
+
+  useEffect(() => {
+    axios.get("https://dev-azproduction-api.flynautstaging.com/admin/moderators").then((res) => {
+      setTableData(res.data);
+    })
+  }, [isUpdate])
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -333,6 +338,7 @@ export default function ModeratorListView() {
                         onSelectRow={() => table.onSelectRow(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}
                         onEditRow={() => handleEditRow(row.id)}
+                        setIsUpdate={setIsUpdate}
                       />
                     ))}
 

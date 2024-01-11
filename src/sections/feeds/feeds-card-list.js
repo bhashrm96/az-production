@@ -26,14 +26,10 @@ export default function FeedsCardList() {
     <Box
       gap={3}
       display="grid"
-      gridTemplateColumns={{
-        xs: 'repeat(1, 1fr)',
-        sm: 'repeat(2, 1fr)',
-        md: 'repeat(3, 1fr)',
-      }}
+      gridTemplateColumns="1fr" // This ensures only one column for all screen sizes
     >
-      {feeds.length > 0 && feeds.map((feeds, index) => (
-        <FeedsCard key={feeds.id} feeds={feeds} index={index} />
+      {feeds.length > 0 && feeds.map((feed, index) => (
+        <FeedsCard key={feed.id} feeds={feed} index={index} />
       ))}
     </Box>
   );

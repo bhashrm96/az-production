@@ -15,7 +15,7 @@ import Lightbox, { useLightBox } from 'src/components/lightbox';
 
 // ----------------------------------------------------------------------
 
-export default function ProfileGallery({ gallery }) {
+export default function ProfileGallery({ gallery, data }) {
   const theme = useTheme();
 
   const slides = gallery.map((slide) => ({
@@ -27,7 +27,7 @@ export default function ProfileGallery({ gallery }) {
   return (
     <>
       <Typography variant="h4" sx={{ my: 5 }}>
-        Gallery
+        Portfolio
       </Typography>
 
       <Box
@@ -39,12 +39,8 @@ export default function ProfileGallery({ gallery }) {
           md: 'repeat(3, 1fr)',
         }}
       >
-        {gallery.map((image) => (
+        {data.map((image) => (
           <Card key={image.id} sx={{ cursor: 'pointer', color: 'common.white' }}>
-            <IconButton color="inherit" sx={{ position: 'absolute', top: 8, right: 8, zIndex: 9 }}>
-              <Iconify icon="eva:more-vertical-fill" />
-            </IconButton>
-
             <ListItemText
               sx={{
                 p: 3,
@@ -54,8 +50,8 @@ export default function ProfileGallery({ gallery }) {
                 zIndex: 9,
                 position: 'absolute',
               }}
-              primary={image.title}
-              secondary={fDate(image.postedAt)}
+              primary={image.portfolio_name}
+              secondary={image.client_name}
               primaryTypographyProps={{
                 noWrap: true,
                 typography: 'subtitle1',
@@ -72,7 +68,7 @@ export default function ProfileGallery({ gallery }) {
             <Image
               alt="gallery"
               ratio="1/1"
-              src={image.imageUrl}
+              src={image.photos.length > 0 ? image.photos[0].url : null}
               onClick={() => lightbox.onOpen(image.imageUrl)}
               overlay={`linear-gradient(to bottom, ${alpha(theme.palette.grey[900], 0)} 0%, ${theme.palette.grey[900]
                 } 75%)`}

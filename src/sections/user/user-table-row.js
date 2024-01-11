@@ -24,7 +24,7 @@ import UserQuickEditForm from './user-quick-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function UserTableRow({ row, selected, onEditRow, onSelectRow, }) {
+export default function UserTableRow({ row, selected, onEditRow, onSelectRow, setIsUpdate }) {
   const { first_name, avatarUrl, last_name, status, email_id, phone_number } = row;
 
   const [permissions, setPermissions] = useState([]);
@@ -109,7 +109,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, })
         </TableCell>
       </TableRow>
 
-      <UserQuickEditForm currentUser={row} open={quickEdit.value} onClose={quickEdit.onFalse} />
+      <UserQuickEditForm setIsUpdate={setIsUpdate} currentUser={row} open={quickEdit.value} onClose={quickEdit.onFalse} />
 
       <CustomPopover
         open={popover.open}
@@ -117,7 +117,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, })
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        <MenuItem
+        {/* <MenuItem
           onClick={() => {
             confirm.onTrue();
             popover.onClose();
@@ -126,7 +126,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, })
         >
           <Iconify icon="solar:trash-bin-trash-bold" />
           Deactivate
-        </MenuItem>
+        </MenuItem> */}
 
         <MenuItem
           onClick={quickEdit.onTrue}

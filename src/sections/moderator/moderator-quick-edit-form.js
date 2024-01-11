@@ -20,13 +20,22 @@ import { USER_STATUS_OPTIONS } from 'src/_mock';
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
+import axios from 'axios';
 
 // ----------------------------------------------------------------------
 
-export default function ModeratorQuickEditForm({ currentModerator, open, onClose }) {
+export default function ModeratorQuickEditForm({ currentModerator, open, onClose, setIsUpdate }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const [permissions, setPermissions] = useState([]);
+
+  useEffect(() => {
+    if (open) {
+      axios.get(`https://dev-azproduction-api.flynautstaging.com/admin/moderators/${currentModerator.id}/permissions`).then(res => {
+        setPermissions(res.data.permissions);
+      })
+    }
+  }, [open])
 
   const handleAddPermission = () => {
     const newPermission = { page_id: '', permission_id: '' };
@@ -54,15 +63,10 @@ export default function ModeratorQuickEditForm({ currentModerator, open, onClose
   };
 
   const NewModeratorSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
+    firstname: Yup.string().required('First name is required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    phoneNumber: Yup.string().required('Phone number is required'),
-    address: Yup.string().required('Address is required'),
-    country: Yup.string().required('Country is required'),
-    company: Yup.string().required('Company is required'),
-    state: Yup.string().required('State is required'),
-    city: Yup.string().required('City is required'),
-    role: Yup.string().required('Role is required'),
+    phone: Yup.string().required('Phone number is required'),
+    lastname: Yup.string().required('Last name is required')
   });
 
   const defaultValues = useMemo(
@@ -70,16 +74,7 @@ export default function ModeratorQuickEditForm({ currentModerator, open, onClose
       firstname: currentModerator?.firstname || '',
       email: currentModerator?.email || '',
       phone: currentModerator?.phone || '',
-      lastname: currentModerator?.lastname || '',
-      company_address: currentModerator?.company_address || '',
-      dob: currentModerator?.dob || '',
-      city: currentModerator?.city || '',
-      state: currentModerator?.state || '',
-      zipcode: currentModerator?.zipcode || '',
-      company_name: currentModerator?.company_name || '',
-      website: currentModerator?.website || '',
-      company_about: currentModerator?.company_about || '',
-      position: currentModerator?.position || '',
+      lastname: currentModerator?.lastname || ''
     }),
     [currentModerator]
   );
@@ -97,13 +92,26 @@ export default function ModeratorQuickEditForm({ currentModerator, open, onClose
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      onClose();
-      enqueueSnackbar('Update success!');
-      console.info('DATA', data);
+      const body = {
+        firstname: data.firstname,
+        lastname: data.lastname,
+        email: data.email,
+        phone: data.phone
+      }
+
+      const response = await axios.put(`https://dev-azproduction-api.flynautstaging.com/admin/moderators/${currentModerator.id}`, body);
+      if (response.status === 200) {
+        const permissionsData = {
+          permissions
+        };
+        await axios.put(`https://dev-azproduction-api.flynautstaging.com/admin/moderators/${currentModerator.id}/permissions`, permissionsData).then(() => {
+          onClose();
+          enqueueSnackbar('Updated successfully')
+          setIsUpdate(pValue => !pValue)
+        })
+      }
     } catch (error) {
-      console.error(error);
+      console.log("error", error);
     }
   });
 
@@ -121,10 +129,6 @@ export default function ModeratorQuickEditForm({ currentModerator, open, onClose
         <DialogTitle>Quick Update</DialogTitle>
 
         <DialogContent>
-          <Alert variant="outlined" severity="info" sx={{ mb: 3 }}>
-            Account is waiting for confirmation
-          </Alert>
-
           <Box
             rowGap={3}
             columnGap={2}
@@ -133,13 +137,15 @@ export default function ModeratorQuickEditForm({ currentModerator, open, onClose
               xs: 'repeat(1, 1fr)',
               sm: 'repeat(2, 1fr)',
             }}
+            sx={{
+              mt: 3
+            }}
           >
 
             <RHFTextField name="firstname" label="First Name" />
             <RHFTextField name="lastname" label="Last Name" />
             <RHFTextField name="email" label="Email Address" />
             <RHFTextField name="phone" label="Phone Number" />
-
             {/* <RHFAutocomplete
               name="country"
               label="Country"
@@ -175,6 +181,7 @@ export default function ModeratorQuickEditForm({ currentModerator, open, onClose
             <RHFTextField name="company" label="Company" />
             <RHFTextField name="role" label="Role" /> */}
           </Box>
+
           <Box
             rowGap={3}
             columnGap={2}
@@ -188,26 +195,28 @@ export default function ModeratorQuickEditForm({ currentModerator, open, onClose
             {permissions.map((permission, index) => (
               <>
                 <RHFSelect
-                  onChange={onRoleChange}
+                  onChange={onPageChange}
+                  index={index}
                   name="page"
-                  defaultValue="Select Page"
+                  defaultValue={permission.page_id}
                   native={false}
                 >
-                  <MenuItem value="1">Users</MenuItem>
-                  <MenuItem value="2">Vendors</MenuItem>
-                  <MenuItem value="3">Gigs</MenuItem>
-                  <MenuItem value="5">Events</MenuItem>
-                  <MenuItem value="6">Classified</MenuItem>
+                  <MenuItem disabled={permissions.some(obj => obj.page_id === 1)} value={1}>Users</MenuItem>
+                  <MenuItem disabled={permissions.some(obj => obj.page_id === 2)} value={2}>Vendors</MenuItem>
+                  <MenuItem disabled={permissions.some(obj => obj.page_id === 3)} value={3}>Gigs</MenuItem>
+                  <MenuItem disabled={permissions.some(obj => obj.page_id === 5)} value={5}>Events</MenuItem>
+                  <MenuItem disabled={permissions.some(obj => obj.page_id === 6)} value={6}>Classified</MenuItem>
                 </RHFSelect>
                 <RHFSelect
+                  onChange={onPermissionChange}
                   name="permission"
-                  defaultValue="Select Permission"
+                  defaultValue={permission.permission_id}
                   index={index}
                   native={false}
                 >
-                  <MenuItem value={1}>Read Only</MenuItem>
-                  <MenuItem value={2}>Full Access</MenuItem>
-                  <MenuItem value={3}>Deny</MenuItem>
+                  <MenuItem disabled={permissions.some(obj => obj.permission_id === 1)} value={1}>Read Only</MenuItem>
+                  <MenuItem disabled={permissions.some(obj => obj.permission_id === 2)} value={2}>Full Access</MenuItem>
+                  <MenuItem disabled={permissions.some(obj => obj.permission_id === 3)} value={3}>Deny</MenuItem>
                 </RHFSelect>
                 <Button onClick={() => handleDeletePermission(index)}>
                   Delete

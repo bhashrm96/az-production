@@ -42,6 +42,17 @@ export default function VendorNewEditForm({ currentVendor }) {
 
   const [permissions, setPermissions] = useState([]);
 
+  const [gender, setGender] = useState([]);
+  const [category, setCategory] = useState([]);
+
+  const onRoleChange = (value, index) => {
+    setGender(value.target.value);
+  };
+
+  const onCategoryChange = (value, index) => {
+    setCategory(value.target.value);
+  };
+
   const handleAddPermission = () => {
     const newPermission = { page_id: '', permission_id: '' };
     setPermissions([...permissions, newPermission]);
@@ -67,23 +78,44 @@ export default function VendorNewEditForm({ currentVendor }) {
     setPermissions(updatedPermissions);
   };
 
+  const [categories, setCategories] = useState([]);
+
   const { enqueueSnackbar } = useSnackbar();
 
+  useEffect(() => {
+    const getCategories = async () => {
+      const response = await axios.get('https://dev-azproduction-api.flynautstaging.com/auth/vendors-categories')
+      console.log(response.data.data, 'rrrrrrrrrr');
+      setCategories(response.data.data);
+    }
+    getCategories();
+  }, [])
+
   const NewVendorSchema = Yup.object().shape({
-    firstname: Yup.string().required('First name is required'),
+    first_name: Yup.string().required('First name is required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    phone: Yup.string().required('Phone number is required'),
-    lastname: Yup.string().required('Last name is required'),
-    password: Yup.string().required().required('Password is required'),
+    phone_no: Yup.string().required('Phone number is required'),
+    last_name: Yup.string().required('Last name is required'),
+    fax_number: Yup.string().required('Fax number is required'),
+    business_name: Yup.string().required('Business name is required'),
+    business_website: Yup.string().required('Business website is required'),
+    company_email: Yup.string().required('Company email is required'),
+    company_phone_no: Yup.string().required('Company phone number is required'),
+    about_company: Yup.string().required('Company description is required')
   });
 
   const defaultValues = useMemo(
     () => ({
-      firstname: '',
+      first_name: '',
+      last_name: '',
       email: '',
-      phone: '',
-      lastname: '',
-      password: ''
+      phone_no: '',
+      business_name: '',
+      business_website: '',
+      company_email: '',
+      company_phone_no: '',
+      about_company: '',
+      fax_number: ''
     }),
     []
   );
@@ -106,24 +138,16 @@ export default function VendorNewEditForm({ currentVendor }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const body = {
-        firstname: data.firstname,
-        lastname: data.lastname,
-        email: data.email,
-        password: data.password,
-        phone: data.phone
+      let body = {
+        ...data,
+        category,
+        gender
       }
 
-      const response = await axios.post('https://dev-azproduction-api.flynautstaging.com/admin/moderators', body);
-      if (response.status === 201) {
-        const vendorId = response.data.vendorId;
-        const permissionsData = {
-          permissions,
-        };
-        const presponse = await axios.post(`https://dev-azproduction-api.flynautstaging.com/admin/vendors/${vendorId}/permissions`, permissionsData);
-        console.log(presponse);
+      const response = await axios.post('https://dev-azproduction-api.flynautstaging.com/admin/create_vendors', body);
+      if (response.status === 200) {
+        router.push(paths.dashboard.vendor.list);
       }
-      router.push(paths.dashboard.vendor.list);
     } catch (error) {
       console.log("error", error);
     }
@@ -254,59 +278,40 @@ export default function VendorNewEditForm({ currentVendor }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="firstname" label="First Name" />
-              <RHFTextField name="lastname" label="Last Name" />
-              <RHFTextField name="email" label="Email Address" />
-              <RHFTextField name="phone" label="Phone Number" />
+              <RHFTextField name="first_name" label="First Name" />
+              <RHFTextField name="last_name" label="Last Name" />
+              <RHFTextField type={'email'} name="email" label="Email Address" />
+              <RHFTextField type={'number'} name="phone_no" label="Phone Number" />
+              <RHFTextField name="business_name" label="Business Name" />
+              <RHFTextField name="business_website" label="Business Website" />
+              <RHFTextField type={'email'} name="company_email" label="Company Email Address" />
+              <RHFTextField type={'number'} name="company_phone_no" label="Company Phone Number" />
+              <RHFTextField name="about_company" label="About Company" />
+              <RHFTextField type={'number'} name="fax_number" label="Fax Number" />
 
-              <RHFTextField name="password" label="Password" />
-              <RHFTextField name="confirmPassword" label="Confirm Password" />
+              <RHFSelect
+                onChange={onRoleChange}
+                name="gender"
+                defaultValue={""}
+                native={false}
+              >
+                <MenuItem value="male">Male</MenuItem>
+                <MenuItem value="female">Female</MenuItem>
+              </RHFSelect>
 
+              <RHFSelect
+                onChange={onCategoryChange}
+                name="category"
+                defaultValue={""}
+                native={false}
+              >
+                {categories.map(x => {
+                  return (
+                    <MenuItem value={x.id}>{x.categoryname}</MenuItem>
+                  )
+                })}
+              </RHFSelect>
             </Box>
-            <Box
-              rowGap={3}
-              columnGap={2}
-              display="grid"
-              gridTemplateColumns={{
-                xs: 'repeat(1, 1fr)',
-                sm: 'repeat(3, 1fr)',
-              }}
-              sx={permissions.length > 0 ? { mt: 2 } : { mt: 0 }}
-            >
-              {permissions.map((permission, index) => (
-                <>
-                  <RHFSelect
-                    onChange={onRoleChange}
-                    name="page"
-                    defaultValue="Select Page"
-                    native={false}
-                  >
-                    <MenuItem value="1">Users</MenuItem>
-                    <MenuItem value="2">Vendors</MenuItem>
-                    <MenuItem value="3">Gigs</MenuItem>
-                    <MenuItem value="5">Events</MenuItem>
-                    <MenuItem value="6">Classified</MenuItem>
-                  </RHFSelect>
-                  <RHFSelect
-                    onChange={onPermissionChange}
-                    name="permission"
-                    defaultValue="Select Permission"
-                    index={index}
-                    native={false}
-                  >
-                    <MenuItem value={1}>Read Only</MenuItem>
-                    <MenuItem value={2}>Full Access</MenuItem>
-                    <MenuItem value={3}>Deny</MenuItem>
-                  </RHFSelect>
-                  <Button onClick={() => handleDeletePermission(index)}>
-                    Delete
-                  </Button>
-                </>
-              ))}
-            </Box>
-            <Button sx={{ mt: 2 }} onClick={handleAddPermission} variant="soft" color="success">
-              Add Permission
-            </Button>
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                 {!currentVendor ? 'Create Vendor' : 'Save Changes'}

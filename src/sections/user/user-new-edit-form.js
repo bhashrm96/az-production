@@ -54,6 +54,9 @@ export default function UserNewEditForm({ currentUser }) {
     phone: Yup.string().required('Phone number is required'),
     lastname: Yup.string().required('Last name is required'),
     password: Yup.string().required().required('Password is required'),
+    confirmPassword: Yup.string()
+      .required('Confirm password is required')
+      .oneOf([Yup.ref('password'), null], 'Passwords must match'),
   });
 
   const defaultValues = useMemo(
@@ -62,7 +65,8 @@ export default function UserNewEditForm({ currentUser }) {
       email: '',
       phone: '',
       lastname: '',
-      password: ''
+      password: '',
+      confirmPassword: ''
     }),
     []
   );
@@ -94,10 +98,12 @@ export default function UserNewEditForm({ currentUser }) {
         gender
       }
 
-      const response = await axios.post('https://dev-azproduction-api.flynautstaging.com/admin/create-user', body);
-      if (response.status === 201) {
-        router.push(paths.dashboard.user.list);
-      }
+      await axios.post('https://dev-azproduction-api.flynautstaging.com/admin/create-user', body).then(() => {
+        console.log('yyyyyy');
+        router.push(paths.dashboard.user.professionals);
+      }).catch((err) => {
+        console.log(err);
+      })
     } catch (error) {
       console.log("error", error);
     }
@@ -233,20 +239,17 @@ export default function UserNewEditForm({ currentUser }) {
               <RHFTextField name="email" label="Email Address" />
               <RHFTextField name="phone" label="Phone Number" />
 
-              <RHFTextField name="password" label="Password" />
-              <RHFTextField name="confirmPassword" label="Confirm Password" />
+              <RHFTextField type={'password'} name="password" label="Password" />
+              <RHFTextField type={'password'} name="confirmPassword" label="Confirm Password" />
 
               <RHFSelect
                 onChange={onRoleChange}
                 name="page"
-                defaultValue="Select Page"
+                defaultValue=""
                 native={false}
               >
-                <MenuItem value="1">Users</MenuItem>
-                <MenuItem value="2">Vendors</MenuItem>
-                <MenuItem value="3">Gigs</MenuItem>
-                <MenuItem value="5">Events</MenuItem>
-                <MenuItem value="6">Classified</MenuItem>
+                <MenuItem value="male">Male</MenuItem>
+                <MenuItem value="female">Female</MenuItem>
               </RHFSelect>
 
             </Box>

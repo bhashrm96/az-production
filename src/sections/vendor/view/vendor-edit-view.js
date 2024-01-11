@@ -31,7 +31,7 @@ export default function VendorEditView({ id }) {
           },
           {
             name: 'Vendor',
-            href: paths.dashboard.vendor.root,
+            href: paths.dashboard.vendor.list,
           },
           { name: currentVendor?.name },
         ]}

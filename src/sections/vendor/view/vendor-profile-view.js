@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Card from '@mui/material/Card';
@@ -22,58 +22,96 @@ import ProfileCover from '../profile-cover';
 import ProfileFriends from '../profile-friends';
 import ProfileGallery from '../profile-gallery';
 import ProfileFollowers from '../profile-followers';
+import ProfileMembers from '../profile-members';
+import axios from 'axios';
 
 // ----------------------------------------------------------------------
 
 const TABS = [
   {
-    value: 'profile',
-    label: 'Profile',
+    value: 'home',
+    label: 'Home',
     icon: <Iconify icon="solar:vendor-id-bold" width={24} />,
   },
   {
-    value: 'followers',
-    label: 'Followers',
-    icon: <Iconify icon="solar:heart-bold" width={24} />,
+    value: 'productServices',
+    label: 'Products and Services'
   },
   {
-    value: 'friends',
-    label: 'Friends',
+    value: 'portfolio',
+    label: 'Portfolio',
     icon: <Iconify icon="solar:vendors-group-rounded-bold" width={24} />,
   },
   {
-    value: 'gallery',
-    label: 'Gallery',
-    icon: <Iconify icon="solar:gallery-wide-bold" width={24} />,
+    value: 'members',
+    label: 'Members',
   },
 ];
 
 // ----------------------------------------------------------------------
 
-export default function VendorProfileView() {
+export default function VendorProfileView({ id }) {
   const settings = useSettingsContext();
 
   const { vendor } = useMockedVendor();
 
+  const [vendorData, setVendorData] = useState()
+
   const [searchFriends, setSearchFriends] = useState('');
 
-  const [currentTab, setCurrentTab] = useState('profile');
+  const [currentTab, setCurrentTab] = useState('home');
+
+  const [products, setProducts] = useState([])
+
+  useEffect(() => {
+    if (vendorData) {
+      let products = []
+      if (vendorData.products.length > 3) {
+        vendorData.products.forEach((x, index) => {
+          if (index < 2) {
+            products.push(x)
+          }
+        })
+      } else {
+        vendorData.products.forEach((x, index) => {
+          products.push(x)
+        })
+        vendorData.services.forEach((x, index) => {
+          if (products.length < 3) {
+            products.push(x)
+          }
+        })
+      }
+      setProducts(products)
+    }
+  }, [vendorData])
 
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
-  }, []);
+  }, [vendorData]);
 
   const handleSearchFriends = useCallback((event) => {
     setSearchFriends(event.target.value);
   }, []);
 
+  useEffect(() => {
+    const getData = async () => {
+      await axios.get(`https://dev-azproduction-api.flynautstaging.com/auth/vendors/${id}`).then((res) => {
+        setVendorData(res.data.data);
+        console.log(res.data.data);
+      })
+    }
+
+    getData()
+  }, [])
+
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Profile"
+        heading="Vendor Details"
         links={[
           { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'Vendor', href: paths.dashboard.modertator.root },
+          { name: 'Vendors', href: paths.dashboard.vendor.list },
           { name: vendor?.displayName },
         ]}
         sx={{
@@ -88,8 +126,7 @@ export default function VendorProfileView() {
         }}
       >
         <ProfileCover
-          role={_vendorAbout.role}
-          name={vendor?.displayName}
+          name={vendorData?.vendorDetails.business_name}
           avatarUrl={vendor?.photoURL}
           coverUrl={_vendorAbout.coverUrl}
         />
@@ -118,19 +155,15 @@ export default function VendorProfileView() {
         </Tabs>
       </Card>
 
-      {currentTab === 'profile' && <ProfileHome info={_vendorAbout} posts={_vendorFeeds} />}
+      {(currentTab === 'home' && vendorData) && <ProfileHome info={_vendorAbout} vendorData={vendorData.vendorDetails} posts={_vendorFeeds}
+        productServices={products} members={vendorData.staff}
+      />}
 
-      {currentTab === 'followers' && <ProfileFollowers followers={_vendorFollowers} />}
+      {currentTab === 'productServices' && <ProfileFollowers data={{ products: vendorData.products, services: vendorData.services }} followers={_vendorFollowers} />}
 
-      {currentTab === 'friends' && (
-        <ProfileFriends
-          friends={_vendorFriends}
-          searchFriends={searchFriends}
-          onSearchFriends={handleSearchFriends}
-        />
-      )}
+      {currentTab === 'portfolio' && <ProfileGallery data={vendorData.portfolio} gallery={_vendorGallery} />}
 
-      {currentTab === 'gallery' && <ProfileGallery gallery={_vendorGallery} />}
+      {currentTab === 'members' && <ProfileMembers data={vendorData.staff} followers={_vendorFollowers} />}
     </Container>
   );
 }

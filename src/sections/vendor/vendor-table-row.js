@@ -22,8 +22,8 @@ import VendorQuickEditForm from './vendor-quick-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function VendorTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
-  const { firstname, avatarUrl, lastname, status, email, phone } = row;
+export default function VendorTableRow({ row, selected, onEditRow, onSelectRow, onViewRow, onDeleteRow, setIsUpdate }) {
+  const { first_name, avatarUrl, last_name, email, phone_no } = row;
 
   const [permissions, setPermissions] = useState([]);
 
@@ -42,18 +42,18 @@ export default function VendorTableRow({ row, selected, onEditRow, onSelectRow, 
 
   return (
     <>
-      <TableRow hover selected={selected}>
+      <TableRow onClick={() => { }} hover selected={selected}>
         <TableCell padding="checkbox">
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
         <TableCell sx={{ display: 'flex', justifyContent: 'center', paddingRight: "0px" }}>
-          <Avatar alt={firstname} src={avatarUrl} />
+          <Avatar alt={first_name} src={avatarUrl} />
         </TableCell>
 
         <TableCell>
           <ListItemText
-            primary={firstname}
+            primary={first_name}
             secondary={email}
             primaryTypographyProps={{ typography: 'body2' }}
             secondaryTypographyProps={{
@@ -63,23 +63,11 @@ export default function VendorTableRow({ row, selected, onEditRow, onSelectRow, 
           />
         </TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{phone}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{phone_no}</TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{firstname}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{first_name}</TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{lastname}</TableCell>
-
-        <TableCell>
-          <Label
-            variant="soft"
-            color={
-              (status === "1" ? 'success' : 'error') ||
-              'default'
-            }
-          >
-            {status === "1" ? "Active" : "Inactive"}
-          </Label>
-        </TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{last_name}</TableCell>
 
         <TableCell align="center" sx={{ px: 1, whiteSpace: 'nowrap' }}>
           {/* <Tooltip title="Quick Edit" placement="top" arrow>
@@ -98,7 +86,7 @@ export default function VendorTableRow({ row, selected, onEditRow, onSelectRow, 
         </TableCell>
       </TableRow>
 
-      <VendorQuickEditForm currentVendor={row} open={quickEdit.value} onClose={quickEdit.onFalse} />
+      <VendorQuickEditForm setIsUpdate={setIsUpdate} currentVendor={row} open={quickEdit.value} onClose={quickEdit.onFalse} />
 
       <CustomPopover
         open={popover.open}
@@ -106,7 +94,7 @@ export default function VendorTableRow({ row, selected, onEditRow, onSelectRow, 
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        <MenuItem
+        {/* <MenuItem
           onClick={() => {
             confirm.onTrue();
             popover.onClose();
@@ -115,13 +103,20 @@ export default function VendorTableRow({ row, selected, onEditRow, onSelectRow, 
         >
           <Iconify icon="solar:trash-bin-trash-bold" />
           Deactivate
-        </MenuItem>
+        </MenuItem> */}
 
         <MenuItem
           onClick={quickEdit.onTrue}
         >
           <Iconify icon="solar:pen-bold" />
           Edit
+        </MenuItem>
+
+        <MenuItem
+          onClick={onViewRow}
+        >
+          <Iconify icon="solar:eye-bold" />
+          View
         </MenuItem>
       </CustomPopover>
 

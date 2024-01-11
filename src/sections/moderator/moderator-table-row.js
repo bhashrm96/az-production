@@ -23,7 +23,7 @@ import ModeratorQuickEditForm from './moderator-quick-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function ModeratorTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
+export default function ModeratorTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, setIsUpdate }) {
   const { firstname, avatarUrl, lastname, status, email, phone } = row;
 
   const [permissions, setPermissions] = useState([]);
@@ -99,7 +99,7 @@ export default function ModeratorTableRow({ row, selected, onEditRow, onSelectRo
         </TableCell>
       </TableRow>
 
-      <ModeratorQuickEditForm currentModerator={row} open={quickEdit.value} onClose={quickEdit.onFalse} />
+      <ModeratorQuickEditForm currentModerator={row} open={quickEdit.value} onClose={quickEdit.onFalse} setIsUpdate={setIsUpdate} />
 
       <CustomPopover
         open={popover.open}
@@ -107,7 +107,7 @@ export default function ModeratorTableRow({ row, selected, onEditRow, onSelectRo
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        <MenuItem
+        {/* <MenuItem
           onClick={() => {
             confirm.onTrue();
             popover.onClose();
@@ -116,7 +116,7 @@ export default function ModeratorTableRow({ row, selected, onEditRow, onSelectRo
         >
           <Iconify icon="solar:trash-bin-trash-bold" />
           Deactivate
-        </MenuItem>
+        </MenuItem> */}
 
         <MenuItem
           onClick={quickEdit.onTrue}

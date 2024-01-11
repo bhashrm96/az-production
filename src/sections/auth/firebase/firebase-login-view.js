@@ -100,11 +100,7 @@ export default function FirebaseLoginView() {
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5 }}>
-<<<<<<< HEAD
       <Typography variant="h4">Sign in to AZ Production Guide</Typography>
-=======
-      <Typography variant="h4">Sign in to AZ Production</Typography>
->>>>>>> 3158989336036a9443c48a8277182b1baf2e5a3a
 
       <Stack direction="row" spacing={0.5}>
         <Typography variant="body2">New user?</Typography>
@@ -113,7 +109,7 @@ export default function FirebaseLoginView() {
           Create an account
         </Link>
       </Stack>
-    </Stack>
+    </Stack >
   );
 
   const renderForm = (
@@ -137,7 +133,7 @@ export default function FirebaseLoginView() {
         }}
       />
 
-      <Link
+      {/* <Link
         component={RouterLink}
         href={paths.auth.firebase.forgotPassword}
         variant="body2"
@@ -146,7 +142,7 @@ export default function FirebaseLoginView() {
         sx={{ alignSelf: 'flex-end' }}
       >
         Forgot password?
-      </Link>
+      </Link> */}
 
       <LoadingButton
         fullWidth

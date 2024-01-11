@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import Fab from '@mui/material/Fab';
@@ -14,6 +14,8 @@ import { alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import Grid from '@mui/material/Unstable_Grid2';
 import CardHeader from '@mui/material/CardHeader';
+import { Avatar } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 import { fNumber } from 'src/utils/format-number';
 
@@ -25,7 +27,8 @@ import ProfilePostItem from './profile-post-item';
 
 // ----------------------------------------------------------------------
 
-export default function ProfileHome({ info, posts }) {
+export default function ProfileHome({ info, posts, vendorData, productServices, members }) {
+  const theme = useTheme();
   const fileRef = useRef(null);
 
   const handleAttach = () => {
@@ -41,18 +44,19 @@ export default function ProfileHome({ info, posts }) {
         divider={<Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />}
       >
         <Stack width={1}>
-          {fNumber(info.totalFollowers)}
+          {/* {fNumber(info.totalFollowers)} */}
+          11k
           <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>
-            Follower
+            Followers
           </Box>
         </Stack>
 
-        <Stack width={1}>
+        {/* <Stack width={1}>
           {fNumber(info.totalFollowing)}
           <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>
             Following
           </Box>
-        </Stack>
+        </Stack> */}
       </Stack>
     </Card>
   );
@@ -62,45 +66,14 @@ export default function ProfileHome({ info, posts }) {
       <CardHeader title="About" />
 
       <Stack spacing={2} sx={{ p: 3 }}>
-        <Box sx={{ typography: 'body2' }}>{info.quote}</Box>
+        <Box sx={{ typography: 'body2' }}>{vendorData.about_company}</Box>
+      </Stack>
 
-        <Stack direction="row" spacing={2}>
-          <Iconify icon="mingcute:location-fill" width={24} />
+      <CardHeader title="Company Info" />
 
-          <Box sx={{ typography: 'body2' }}>
-            {`Live at `}
-            <Link variant="subtitle2" color="inherit">
-              {info.country}
-            </Link>
-          </Box>
-        </Stack>
-
-        <Stack direction="row" sx={{ typography: 'body2' }}>
-          <Iconify icon="fluent:mail-24-filled" width={24} sx={{ mr: 2 }} />
-          {info.email}
-        </Stack>
-
-        <Stack direction="row" spacing={2}>
-          <Iconify icon="ic:round-business-center" width={24} />
-
-          <Box sx={{ typography: 'body2' }}>
-            {info.role} {`at `}
-            <Link variant="subtitle2" color="inherit">
-              {info.company}
-            </Link>
-          </Box>
-        </Stack>
-
-        <Stack direction="row" spacing={2}>
-          <Iconify icon="ic:round-business-center" width={24} />
-
-          <Box sx={{ typography: 'body2' }}>
-            {`Studied at `}
-            <Link variant="subtitle2" color="inherit">
-              {info.school}
-            </Link>
-          </Box>
-        </Stack>
+      <Stack spacing={2} sx={{ p: 3 }}>
+        <Box sx={{ typography: 'body2' }}>{vendorData.business_website}</Box>
+        <Box sx={{ typography: 'body2' }}>{vendorData.company_email}</Box>
       </Stack>
     </Card>
   );
@@ -140,37 +113,124 @@ export default function ProfileHome({ info, posts }) {
     </Card>
   );
 
-  const renderSocials = (
+  const renderProducts = (
     <Card>
-      <CardHeader title="Social" />
+      <CardHeader title="Products and Services" />
 
       <Stack spacing={2} sx={{ p: 3 }}>
-        {_socials.map((link) => (
+        {productServices.map((product) => (
           <Stack
-            key={link.name}
+            key={product.id}
             spacing={2}
             direction="row"
-            sx={{ wordBreak: 'break-all', typography: 'body2' }}
+            sx={{ wordBreak: 'break-all', typography: 'body2', display: 'flex', alignItems: 'center' }}
           >
-            <Iconify
-              icon={link.icon}
-              width={24}
+            <Avatar
+              src={product.photos?.length > 0 && product.photos[0].url}
+              alt={product.name}
               sx={{
-                flexShrink: 0,
-                color: link.color,
+                width: { xs: 30, md: 30 },
+                height: { xs: 30, md: 30 },
+                border: `solid 2px ${theme.palette.common.white}`,
               }}
             />
-            <Link color="inherit">
-              {link.value === 'facebook' && info.socialLinks.facebook}
-              {link.value === 'instagram' && info.socialLinks.instagram}
-              {link.value === 'linkedin' && info.socialLinks.linkedin}
-              {link.value === 'twitter' && info.socialLinks.twitter}
-            </Link>
+            <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>
+              {product.name}
+            </Box>
+            <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>
+              {product.price}
+            </Box>
+
           </Stack>
         ))}
+
+      </Stack>
+      <Stack>
+        <Link sx={{ textAlign: 'center', marginBottom: '10px' }}>
+          View All
+        </Link>
       </Stack>
     </Card>
   );
+
+  const renderMembers = (
+    <Card>
+      <CardHeader title="Members" />
+
+      <Stack spacing={2} sx={{ p: 3 }}>
+        {members.map((product) => (
+          <Stack
+            key={product.id}
+            spacing={2}
+            direction="row"
+            sx={{ wordBreak: 'break-all', typography: 'body2', display: 'flex', alignItems: 'center' }}
+          >
+            <Avatar
+              alt={product.first_name}
+              sx={{
+                width: { xs: 30, md: 30 },
+                height: { xs: 30, md: 30 },
+                border: `solid 2px ${theme.palette.common.white}`,
+              }}
+            />
+            <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>
+              {product.first_name}
+            </Box>
+            <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>
+              {product.last_name}
+            </Box>
+
+          </Stack>
+        ))}
+
+      </Stack>
+      <Stack>
+        <Link sx={{ textAlign: 'center', marginBottom: '10px' }}>
+          View All
+        </Link>
+      </Stack>
+    </Card>
+  );
+
+  // const renderPortfolio = (
+  //   <Card>
+  //     <CardHeader title="Products and Services" />
+
+  //     <Stack spacing={2} sx={{ p: 3 }}>
+  //       {productServices.products.map((product) => (
+  //         <Stack
+  //           key={product.id}
+  //           spacing={2}
+  //           direction="row"
+  //           sx={{ wordBreak: 'break-all', typography: 'body2', display: 'flex', alignItems: 'center' }}
+  //         >
+  //           <Avatar
+  //             src={product.photos.length > 0 && product.photos[0].url}
+  //             alt={product.name}
+  //             sx={{
+  //               width: { xs: 30, md: 30 },
+  //               height: { xs: 30, md: 30 },
+  //               border: `solid 2px ${theme.palette.common.white}`,
+  //             }}
+  //           />
+  //           <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>
+  //             {product.name}
+  //           </Box>
+  //           <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>
+  //             {product.price}
+  //           </Box>
+
+  //         </Stack>
+  //       ))}
+
+  //     </Stack>
+  //     <Stack>
+  //       <Link sx={{ textAlign: 'center', marginBottom: '10px' }}>
+  //         View All
+  //       </Link>
+  //     </Stack>
+  //   </Card>
+  // );
 
   return (
     <Grid container spacing={3}>
@@ -180,14 +240,14 @@ export default function ProfileHome({ info, posts }) {
 
           {renderAbout}
 
-          {renderSocials}
+          {renderProducts}
+
+          {renderMembers}
         </Stack>
       </Grid>
 
       <Grid xs={12} md={8}>
         <Stack spacing={3}>
-          {renderPostInput}
-
           {posts.map((post) => (
             <ProfilePostItem key={post.id} post={post} />
           ))}

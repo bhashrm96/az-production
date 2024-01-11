@@ -58,30 +58,27 @@ if ('moderator' in JSON.parse(localStorage.getItem("user"))) {
     TABLE_HEAD = [
       { id: '' },
       { id: 'email', label: 'Email' },
-      { id: 'phone', label: 'Phone Number' },
-      { id: 'firstname', label: 'First Name' },
-      { id: 'lastname', label: 'Last Name' },
-      { id: 'status', label: 'Status' },
+      { id: 'phone_no', label: 'Phone Number' },
+      { id: 'first_name', label: 'First Name' },
+      { id: 'last_name', label: 'Last Name' },
       { id: '' },
     ];
   } else {
     TABLE_HEAD = [
       { id: '' },
       { id: 'email', label: 'Email' },
-      { id: 'phone', label: 'Phone Number' },
-      { id: 'firstname', label: 'First Name' },
-      { id: 'lastname', label: 'Last Name' },
-      { id: 'status', label: 'Status' },
+      { id: 'phone_no', label: 'Phone Number' },
+      { id: 'first_name', label: 'First Name' },
+      { id: 'last_name', label: 'Last Name' },
     ];
   }
 } else {
   TABLE_HEAD = [
     { id: '' },
     { id: 'email', label: 'Email' },
-    { id: 'phone', label: 'Phone Number' },
-    { id: 'firstname', label: 'First Name' },
-    { id: 'lastname', label: 'Last Name' },
-    { id: 'status', label: 'Status' },
+    { id: 'phone_no', label: 'Phone Number' },
+    { id: 'first_name', label: 'First Name' },
+    { id: 'last_name', label: 'Last Name' },
     { id: '' },
   ];
 }
@@ -108,6 +105,8 @@ export default function VendorListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
+  const [isUpdate, setIsUpdate] = useState(false);
+
   const dataFiltered = applyFilter({
     inputData: tableData,
     comparator: getComparator(table.order, table.orderBy),
@@ -128,10 +127,12 @@ export default function VendorListView() {
   const [permissions, setPermissions] = useState([]);
 
   useEffect(() => {
-    axios.get("https://dev-azproduction-api.flynautstaging.com/admin/moderators").then((res) => {
+    axios.get("https://dev-azproduction-api.flynautstaging.com/admin/all-vendors").then((res) => {
       setTableData(res.data);
     })
+  }, [isUpdate])
 
+  useEffect(() => {
     if ('moderator' in JSON.parse(localStorage.getItem("user"))) {
       const data = JSON.parse(localStorage.getItem("user")).permissions.filter((x) => x.page_id === 2)
       setPermissions(data)
@@ -335,6 +336,8 @@ export default function VendorListView() {
                         onSelectRow={() => table.onSelectRow(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}
                         onEditRow={() => handleEditRow(row.id)}
+                        onViewRow={() => router.push(paths.dashboard.vendor.details(row.id))}
+                        setIsUpdate={setIsUpdate}
                       />
                     ))}
 

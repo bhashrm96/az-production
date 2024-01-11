@@ -55,14 +55,15 @@ export default function ModeratorNewEditForm({ currentModerator }) {
   const onPageChange = (value, index) => {
     console.log(index);
     const updatedPermissions = [...permissions];
-    updatedPermissions[index].page_id = value.target.value;
+    console.log(updatedPermissions[index]);
+    updatedPermissions[index].page_id = parseInt(value.target.value);
     console.log(updatedPermissions);
     setPermissions(updatedPermissions);
   };
 
   const onPermissionChange = (value, index) => {
     const updatedPermissions = [...permissions];
-    updatedPermissions[index].permission_id = value.target.value;
+    updatedPermissions[index].permission_id = parseInt(value.target.value);
     console.log(updatedPermissions);
     setPermissions(updatedPermissions);
   };
@@ -75,6 +76,9 @@ export default function ModeratorNewEditForm({ currentModerator }) {
     phone: Yup.string().required('Phone number is required'),
     lastname: Yup.string().required('Last name is required'),
     password: Yup.string().required().required('Password is required'),
+    confirmPassword: Yup.string()
+      .required('Confirm password is required')
+      .oneOf([Yup.ref('password'), null], 'Passwords must match'),
   });
 
   const defaultValues = useMemo(
@@ -83,7 +87,8 @@ export default function ModeratorNewEditForm({ currentModerator }) {
       email: '',
       phone: '',
       lastname: '',
-      password: ''
+      password: '',
+      confirmPassword: ''
     }),
     [currentModerator]
   );
@@ -120,8 +125,7 @@ export default function ModeratorNewEditForm({ currentModerator }) {
         const permissionsData = {
           permissions
         };
-        const presponse = await axios.post(`https://dev-azproduction-api.flynautstaging.com/admin/moderators/${moderatorId}/permissions`, permissionsData);
-        console.log(presponse);
+        await axios.post(`https://dev-azproduction-api.flynautstaging.com/admin/moderators/${moderatorId}/permissions`, permissionsData);
       }
       router.push(paths.dashboard.moderator.list);
     } catch (error) {
@@ -256,11 +260,11 @@ export default function ModeratorNewEditForm({ currentModerator }) {
             >
               <RHFTextField name="firstname" label="First Name" />
               <RHFTextField name="lastname" label="Last Name" />
-              <RHFTextField name="email" label="Email Address" />
+              <RHFTextField type={'email'} name="email" label="Email Address" />
               <RHFTextField name="phone" label="Phone Number" />
 
-              <RHFTextField name="password" label="Password" />
-              <RHFTextField name="confirmPassword" label="Confirm Password" />
+              <RHFTextField type={'password'} name="password" label="Password" />
+              <RHFTextField type={'password'} name="confirmPassword" label="Confirm Password" />
 
             </Box>
             <Box
@@ -276,27 +280,28 @@ export default function ModeratorNewEditForm({ currentModerator }) {
               {permissions.map((permission, index) => (
                 <>
                   <RHFSelect
-                    onChange={onRoleChange}
+                    onChange={onPageChange}
+                    index={index}
                     name="page"
-                    defaultValue="Select Page"
+                    defaultValue={permission.page_id}
                     native={false}
                   >
-                    <MenuItem value="1">Users</MenuItem>
-                    <MenuItem value="2">Vendors</MenuItem>
-                    <MenuItem value="3">Gigs</MenuItem>
-                    <MenuItem value="5">Events</MenuItem>
-                    <MenuItem value="6">Classified</MenuItem>
+                    <MenuItem disabled={permissions.some(obj => obj.page_id === 1)} value={1}>Users</MenuItem>
+                    <MenuItem disabled={permissions.some(obj => obj.page_id === 2)} value={2}>Vendors</MenuItem>
+                    <MenuItem disabled={permissions.some(obj => obj.page_id === 3)} value={3}>Gigs</MenuItem>
+                    <MenuItem disabled={permissions.some(obj => obj.page_id === 5)} value={5}>Events</MenuItem>
+                    <MenuItem disabled={permissions.some(obj => obj.page_id === 6)} value={6}>Classified</MenuItem>
                   </RHFSelect>
                   <RHFSelect
                     onChange={onPermissionChange}
                     name="permission"
-                    defaultValue="Select Permission"
+                    defaultValue={permission.permission_id}
                     index={index}
                     native={false}
                   >
-                    <MenuItem value={1}>Read Only</MenuItem>
-                    <MenuItem value={2}>Full Access</MenuItem>
-                    <MenuItem value={3}>Deny</MenuItem>
+                    <MenuItem disabled={permissions.some(obj => obj.permission_id === 1)} value={1}>Read Only</MenuItem>
+                    <MenuItem disabled={permissions.some(obj => obj.permission_id === 2)} value={2}>Full Access</MenuItem>
+                    <MenuItem disabled={permissions.some(obj => obj.permission_id === 3)} value={3}>Deny</MenuItem>
                   </RHFSelect>
                   <Button onClick={() => handleDeletePermission(index)}>
                     Delete
