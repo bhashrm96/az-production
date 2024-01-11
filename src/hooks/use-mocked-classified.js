@@ -16,8 +16,8 @@ export function useMockedClassified() {
   const classified = {
     id: '8864c717-587d-472a-929a-8e5f298024da-0',
     displayName: 'Jaydon Frankie',
-    email: 'demo@minimals.cc',
-    password: 'demo1234',
+    email: 'admin@azproductionguide.com',
+    password: 'PnTW73!@E1',
     photoURL: _mock.image.avatar(24),
     phoneNumber: '+40 777666555',
     country: 'United States',
