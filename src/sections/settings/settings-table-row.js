@@ -72,6 +72,7 @@ export default function SettingsTableRow({ row, selected, onEditRow, onSelectRow
           {stripHtmlTags(answer)}
         </TableCell>
 
+
         {/* <TableCell>
           <Label
             variant="soft"
