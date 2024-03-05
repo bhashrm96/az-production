@@ -1,11 +1,12 @@
-import { VendorProfileView } from 'src/sections/vendor/view';
+import { VendorListView } from 'src/sections/vendor/view';
 
 // ----------------------------------------------------------------------
 
 export const metadata = {
-  title: 'Dashboard: User Profile',
+  title: 'Dashboard: User List',
 };
 
-export default function UserProfilePage() {
-  return <VendorProfileView />;
+export default function UserListPage() {
+  return <VendorListView />;
 }
+

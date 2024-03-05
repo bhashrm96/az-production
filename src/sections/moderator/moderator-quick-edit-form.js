@@ -214,9 +214,9 @@ export default function ModeratorQuickEditForm({ currentModerator, open, onClose
                   index={index}
                   native={false}
                 >
-                  <MenuItem disabled={permissions.some(obj => obj.permission_id === 1)} value={1}>Read Only</MenuItem>
-                  <MenuItem disabled={permissions.some(obj => obj.permission_id === 2)} value={2}>Full Access</MenuItem>
-                  <MenuItem disabled={permissions.some(obj => obj.permission_id === 3)} value={3}>Deny</MenuItem>
+                  <MenuItem value={1}>Read Only</MenuItem>
+                  <MenuItem value={2}>Full Access</MenuItem>
+                  <MenuItem value={3}>Deny</MenuItem>
                 </RHFSelect>
                 <Button onClick={() => handleDeletePermission(index)}>
                   Delete

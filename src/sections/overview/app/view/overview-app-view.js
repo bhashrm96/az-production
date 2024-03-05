@@ -23,6 +23,9 @@ import AppAreaInstalled from '../app-area-installed';
 import AppWidgetSummary from '../app-widget-summary';
 import AppCurrentDownload from '../app-current-download';
 import AppTopInstalledCountries from '../app-top-installed-countries';
+import { CardHeader } from '@mui/material';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 // ----------------------------------------------------------------------
 
@@ -33,62 +36,112 @@ export default function OverviewAppView() {
 
   const settings = useSettingsContext();
 
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    axios.get('https://dev-azproduction-api.flynautstaging.com/admin/dashboard-data').then((res) => {
+      setData(res.data.data);
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, [])
+
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <Grid container spacing={3}>
-        <Grid xs={12} md={8}>
+
+        <Grid xs={12} md={12}>
           <AppWelcome
             title={`Welcome back 👋 \n ${JSON.parse(localStorage.getItem("user")).moderator ? JSON.parse(localStorage.getItem("user")).moderator.firstname : JSON.parse(localStorage.getItem("user")).name}`}
-            description="If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything."
-            img={<SeoIllustration />}
-            action={
-              <Button variant="contained" color="primary">
-                Go Now
-              </Button>
-            }
           />
         </Grid>
 
-        <Grid xs={12} md={4}>
-          <AppFeatured list={_appFeatured} />
+        <Grid xs={12}>
+          <CardHeader title="User Management" />
         </Grid>
 
         <Grid xs={12} md={4}>
           <AppWidgetSummary
-            title="Total Active Users"
-            percent={2.6}
-            total={18765}
+            title="Total Users"
+            total={data?.users}
             chart={{
-              series: [5, 18, 12, 51, 68, 11, 39, 37, 27, 20],
             }}
           />
         </Grid>
 
         <Grid xs={12} md={4}>
           <AppWidgetSummary
-            title="Total Installed"
-            percent={0.2}
-            total={4876}
+            title="Total Vendors"
+            total={data?.vendors}
             chart={{
               colors: [theme.palette.info.light, theme.palette.info.main],
-              series: [20, 41, 63, 33, 28, 35, 50, 46, 11, 26],
             }}
           />
         </Grid>
 
         <Grid xs={12} md={4}>
           <AppWidgetSummary
-            title="Total Downloads"
-            percent={-0.1}
-            total={678}
+            title="Total Moderators"
+            total={data?.moderators}
             chart={{
               colors: [theme.palette.warning.light, theme.palette.warning.main],
-              series: [8, 9, 31, 8, 16, 37, 8, 33, 46, 31],
             }}
           />
         </Grid>
 
-        <Grid xs={12} md={6} lg={4}>
+        <Grid xs={12}>
+          <CardHeader title="App Management" />
+        </Grid>
+
+        <Grid xs={12} md={4}>
+          <AppWidgetSummary
+            title="Total Gigs"
+            total={data?.gigs}
+            chart={{
+            }}
+          />
+        </Grid>
+
+        <Grid xs={12} md={4}>
+          <AppWidgetSummary
+            title="Total Events"
+            total={data?.events}
+            chart={{
+              colors: [theme.palette.info.light, theme.palette.info.main],
+            }}
+          />
+        </Grid>
+
+        <Grid xs={12} md={4}>
+          <AppWidgetSummary
+            title="Total Classified"
+            total={data?.classifieds}
+            chart={{
+              colors: [theme.palette.warning.light, theme.palette.warning.main],
+            }}
+          />
+        </Grid>
+
+        <Grid xs={12} md={6}>
+          <AppWidgetSummary
+            title="Total Communities"
+            total={data?.communities}
+            chart={{
+            }}
+          />
+        </Grid>
+
+        <Grid xs={12} md={6}>
+          <AppWidgetSummary
+            title="Total Feeds"
+            total={data?.feeds}
+            chart={{
+              colors: [theme.palette.info.light, theme.palette.info.main],
+            }}
+          />
+        </Grid>
+
+        {/* <Grid xs={12} md={6} lg={4}>
           <AppCurrentDownload
             title="Current Download"
             chart={{
@@ -200,7 +253,7 @@ export default function OverviewAppView() {
               }}
             />
           </Stack>
-        </Grid>
+        </Grid> */}
       </Grid>
     </Container>
   );

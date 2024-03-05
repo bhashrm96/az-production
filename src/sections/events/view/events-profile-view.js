@@ -26,16 +26,20 @@ import ProfileFollowers from '../profile-followers';
 
 export default function EventsProfileView({ id }) {
   const [data, setData] = useState({})
+  const [isUpdate, setIsUpdate] = useState(false);
+
   useEffect(() => {
-    axios.get("https://dev-azproduction-api.flynautstaging.com/events/view_all_events", {
+    axios.post("https://dev-azproduction-api.flynautstaging.com/events/event_details", {
+      event_id: id
+    }, {
       headers: {
         Authorization: sessionStorage.getItem('accessToken')
       }
     }).then((res) => {
-
-      setData(res.data.data[id]);
+      setData(res.data.data);
     })
-  }, [])
+  }, [isUpdate])
+
   const settings = useSettingsContext();
 
   const { events } = useMockedEvents();
@@ -80,7 +84,7 @@ export default function EventsProfileView({ id }) {
         />
       </Card>
 
-      <ProfileHome info={data} posts={_eventsFeeds} />
+      <ProfileHome setIsUpdate={setIsUpdate} info={data} posts={_eventsFeeds} />
     </Container >
   );
 }

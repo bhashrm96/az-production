@@ -19,6 +19,7 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 import VendorQuickEditForm from './vendor-quick-edit-form';
+import axios from 'axios';
 
 // ----------------------------------------------------------------------
 
@@ -33,6 +34,19 @@ export default function VendorTableRow({ row, selected, onEditRow, onSelectRow, 
       setPermissions(data)
     }
   }, [])
+
+  const handleStatusChange = async (id) => {
+    const res = await axios.delete(`https://dev-azproduction-api.flynautstaging.com/admin/delete_vendor/${id}`, {
+      headers: {
+        Authorization: sessionStorage.getItem("accessToken")
+      }
+    }).then(res => {
+      setIsUpdate(pValue => { return !pValue });
+      confirm.onFalse();
+    }).catch(err => {
+      console.log(err);
+    })
+  }
 
   const confirm = useBoolean();
 
@@ -118,6 +132,17 @@ export default function VendorTableRow({ row, selected, onEditRow, onSelectRow, 
           <Iconify icon="solar:eye-bold" />
           View
         </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            confirm.onTrue();
+            popover.onClose();
+          }}
+          sx={{ color: 'error.main' }}
+        >
+          <Iconify icon="solar:trash-bin-trash-bold" />
+          Delete
+        </MenuItem>
       </CustomPopover>
 
       <ConfirmDialog
@@ -126,7 +151,7 @@ export default function VendorTableRow({ row, selected, onEditRow, onSelectRow, 
         title="Delete"
         content="Are you sure want to delete?"
         action={
-          <Button variant="contained" color="error" onClick={onDeleteRow}>
+          <Button variant="contained" color="error" onClick={() => handleStatusChange(row.id)}>
             Delete
           </Button>
         }

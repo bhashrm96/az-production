@@ -13,7 +13,7 @@ export default function GigsCardList() {
   const [cards, setCards] = useState([])
 
   useEffect(() => {
-    axios.get("https://dev-azproduction-api.flynautstaging.com/gigs/view_all_gigs", {
+    axios.get("https://dev-azproduction-api.flynautstaging.com/admin/view_all_gigs", {
       headers: {
         Authorization: sessionStorage.getItem('accessToken')
       }
@@ -27,15 +27,17 @@ export default function GigsCardList() {
     <Box
       gap={3}
       display="grid"
-      gridTemplateColumns={{
+      gridTemplateColumns={cards.length > 0 ? {
         xs: 'repeat(1, 1fr)',
         sm: 'repeat(2, 1fr)',
         md: 'repeat(3, 1fr)',
-      }}
+      } : {}}
     >
-      {cards.map((gigs, index) => (
+      {cards.length > 0 ? cards.map((gigs, index) => (
         <GigsCard key={gigs.id} gigs={gigs} index={index} />
-      ))}
+      )) : <div style={{ fontSize: '1.6rem', fontWeight: 'bold', textAlign: "center", width: "100%" }}>
+        No Gig Found!
+      </div>}
     </Box>
   );
 }

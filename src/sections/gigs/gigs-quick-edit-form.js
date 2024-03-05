@@ -13,19 +13,20 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-
+import axios from 'axios';
 import { countries } from 'src/assets/data';
 import { USER_STATUS_OPTIONS } from 'src/_mock';
-
+import { paths } from 'src/routes/paths';
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
+import { useRouter } from 'src/routes/hooks';
 
 // ----------------------------------------------------------------------
 
-export default function GigsQuickEditForm({ currentGigs, open, onClose }) {
+export default function GigsQuickEditForm({ currentGigs, open, onClose, setIsUpdate }) {
   const { enqueueSnackbar } = useSnackbar();
-
+  const router = useRouter();
   const [permissions, setPermissions] = useState([]);
 
   const handleAddPermission = () => {
@@ -54,39 +55,12 @@ export default function GigsQuickEditForm({ currentGigs, open, onClose }) {
   };
 
   const NewGigsSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    phoneNumber: Yup.string().required('Phone number is required'),
-    address: Yup.string().required('Address is required'),
-    country: Yup.string().required('Country is required'),
-    company: Yup.string().required('Company is required'),
-    state: Yup.string().required('State is required'),
-    city: Yup.string().required('City is required'),
-    role: Yup.string().required('Role is required'),
+    title: Yup.string().required('Title is required'),
+    rate: Yup.string().required('Rate is required')
   });
-
-  const defaultValues = useMemo(
-    () => ({
-      firstname: currentGigs?.firstname || '',
-      email: currentGigs?.email || '',
-      phone: currentGigs?.phone || '',
-      lastname: currentGigs?.lastname || '',
-      company_address: currentGigs?.company_address || '',
-      dob: currentGigs?.dob || '',
-      city: currentGigs?.city || '',
-      state: currentGigs?.state || '',
-      zipcode: currentGigs?.zipcode || '',
-      company_name: currentGigs?.company_name || '',
-      website: currentGigs?.website || '',
-      company_about: currentGigs?.company_about || '',
-      position: currentGigs?.position || '',
-    }),
-    [currentGigs]
-  );
 
   const methods = useForm({
     resolver: yupResolver(NewGigsSchema),
-    defaultValues,
   });
 
   const {
@@ -95,13 +69,31 @@ export default function GigsQuickEditForm({ currentGigs, open, onClose }) {
     formState: { isSubmitting },
   } = methods;
 
+  useEffect(() => {
+    reset({
+      title: currentGigs?.gigs_title || '',
+      rate: currentGigs?.rate || '',
+    });
+
+  }, [reset, currentGigs]);
+
   const onSubmit = handleSubmit(async (data) => {
+
+    let body = {
+      id: currentGigs.id,
+      gigs_title: data.title,
+      rate: data.rate
+    }
+
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      onClose();
-      enqueueSnackbar('Update success!');
-      console.info('DATA', data);
+      axios.put("https://dev-azproduction-api.flynautstaging.com/admin/update_gigs", body, {
+        headers: {
+          Authorization: sessionStorage.getItem("accessToken")
+        }
+      }).then((res) => {
+        setIsUpdate(pValue => { return !pValue });
+        onClose();
+      })
     } catch (error) {
       console.error(error);
     }
@@ -121,10 +113,6 @@ export default function GigsQuickEditForm({ currentGigs, open, onClose }) {
         <DialogTitle>Quick Update</DialogTitle>
 
         <DialogContent>
-          <Alert variant="outlined" severity="info" sx={{ mb: 3 }}>
-            Account is waiting for confirmation
-          </Alert>
-
           <Box
             rowGap={3}
             columnGap={2}
@@ -133,12 +121,11 @@ export default function GigsQuickEditForm({ currentGigs, open, onClose }) {
               xs: 'repeat(1, 1fr)',
               sm: 'repeat(2, 1fr)',
             }}
+            sx={{ mt: 2 }}
           >
 
-            <RHFTextField name="firstname" label="First Name" />
-            <RHFTextField name="lastname" label="Last Name" />
-            <RHFTextField name="email" label="Email Address" />
-            <RHFTextField name="phone" label="Phone Number" />
+            <RHFTextField name="title" label="Title" />
+            <RHFTextField name="rate" label="Rate" />
 
             {/* <RHFAutocomplete
               name="country"
@@ -175,49 +162,6 @@ export default function GigsQuickEditForm({ currentGigs, open, onClose }) {
             <RHFTextField name="company" label="Company" />
             <RHFTextField name="role" label="Role" /> */}
           </Box>
-          <Box
-            rowGap={3}
-            columnGap={2}
-            display="grid"
-            gridTemplateColumns={{
-              xs: 'repeat(1, 1fr)',
-              sm: 'repeat(3, 1fr)',
-            }}
-            sx={permissions.length > 0 ? { mt: 2 } : { mt: 0 }}
-          >
-            {permissions.map((permission, index) => (
-              <>
-                <RHFSelect
-                  onChange={onRoleChange}
-                  name="page"
-                  defaultValue="Select Page"
-                  native={false}
-                >
-                  <MenuItem value="1">Users</MenuItem>
-                  <MenuItem value="2">Vendors</MenuItem>
-                  <MenuItem value="3">Gigs</MenuItem>
-                  <MenuItem value="5">Events</MenuItem>
-                  <MenuItem value="6">Classified</MenuItem>
-                </RHFSelect>
-                <RHFSelect
-                  name="permission"
-                  defaultValue="Select Permission"
-                  index={index}
-                  native={false}
-                >
-                  <MenuItem value={1}>Read Only</MenuItem>
-                  <MenuItem value={2}>Full Access</MenuItem>
-                  <MenuItem value={3}>Deny</MenuItem>
-                </RHFSelect>
-                <Button onClick={() => handleDeletePermission(index)}>
-                  Delete
-                </Button>
-              </>
-            ))}
-          </Box>
-          <Button sx={{ mt: 2 }} onClick={handleAddPermission} variant="soft" color="success">
-            Add Permission
-          </Button>
         </DialogContent>
 
         <DialogActions>

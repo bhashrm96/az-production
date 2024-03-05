@@ -29,7 +29,7 @@ export default function EventsCard({ events, index }) {
   const { event_title, images, event_description, event_category_name, start_time, end_time, avatarUrl, event_date } = events;
 
   return (
-    <div onClick={() => router.push(paths.dashboard.events.details(index))}>
+    <div onClick={() => router.push(paths.dashboard.events.details(events.id))}>
       <Card sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column' }}>
         <Box sx={{ position: 'relative' }}>
           {/* <AvatarShape
@@ -67,7 +67,7 @@ export default function EventsCard({ events, index }) {
         </Box>
 
         <ListItemText
-          sx={{ mt: 7, mb: 1 }}
+          sx={{ mt: 2, mb: 1 }}
           primary={`${event_title}`}
           primaryTypographyProps={{ typography: 'subtitle1' }}
           secondaryTypographyProps={{ component: 'span', mt: 0.5 }}

@@ -29,7 +29,7 @@ export default function ClassifiedCard({ classified, index }) {
   const { ad_title, image_url, category_name, price, avatarUrl } = classified;
 
   return (
-    <div onClick={() => router.push(paths.dashboard.classified.details(index))}>
+    <div onClick={() => router.push(paths.dashboard.classified.details(classified.id))}>
       <Card sx={{ textAlign: 'center' }}>
         <Box sx={{ position: 'relative' }}>
           {/* <AvatarShape
@@ -67,7 +67,7 @@ export default function ClassifiedCard({ classified, index }) {
         </Box>
 
         <ListItemText
-          sx={{ mt: 7, mb: 1 }}
+          sx={{ mt: 2, mb: 1 }}
           primary={ad_title}
           secondary={category_name}
           primaryTypographyProps={{ typography: 'subtitle1' }}

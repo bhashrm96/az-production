@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Card from '@mui/material/Card';
@@ -22,6 +22,7 @@ import ProfileCover from '../profile-cover';
 import ProfileFriends from '../profile-friends';
 import ProfileGallery from '../profile-gallery';
 import ProfileFollowers from '../profile-followers';
+import axios from 'axios';
 
 // ----------------------------------------------------------------------
 
@@ -50,7 +51,7 @@ const TABS = [
 
 // ----------------------------------------------------------------------
 
-export default function UserProfileView() {
+export default function UserProfileView({ id }) {
   const settings = useSettingsContext();
 
   const { user } = useMockedUser();
@@ -58,6 +59,7 @@ export default function UserProfileView() {
   const [searchFriends, setSearchFriends] = useState('');
 
   const [currentTab, setCurrentTab] = useState('profile');
+  const [data, setData] = useState()
 
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
@@ -67,34 +69,49 @@ export default function UserProfileView() {
     setSearchFriends(event.target.value);
   }, []);
 
-  return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <CustomBreadcrumbs
-        heading="Profile"
-        links={[
-          { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'User', href: paths.dashboard.user.root },
-          { name: user?.displayName },
-        ]}
-        sx={{
-          mb: { xs: 3, md: 5 },
-        }}
-      />
+  useEffect(() => {
+    const getData = async () => {
+      await axios.get(`https://dev-azproduction-api.flynautstaging.com/admin/get_profile_by_id/${id}`, {
+        headers: {
+          Authorization: sessionStorage.getItem('accessToken')
+        }
+      }).then((res) => {
+        setData(res.data.data);
+      })
+    }
 
-      <Card
-        sx={{
-          mb: 3,
-          height: 290,
-        }}
-      >
-        <ProfileCover
-          role={_userAbout.role}
-          name={user?.displayName}
-          avatarUrl={user?.photoURL}
-          coverUrl={_userAbout.coverUrl}
+    getData()
+  }, [])
+
+  return (
+    <>
+      {data && <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+        <CustomBreadcrumbs
+          heading="Profile"
+          links={[
+            { name: 'Dashboard', href: paths.dashboard.root },
+            { name: 'User', href: paths.dashboard.user.root },
+            { name: user?.displayName },
+          ]}
+          sx={{
+            mb: { xs: 3, md: 5 },
+          }}
         />
 
-        <Tabs
+        <Card
+          sx={{
+            mb: 3,
+            height: 290,
+          }}
+        >
+          <ProfileCover
+            role={data?.profile.email_id}
+            name={data?.profile.first_name + data?.last_name}
+            avatarUrl={data?.profile.pic}
+            coverUrl={_userAbout.coverUrl}
+          />
+
+          {/* <Tabs
           value={currentTab}
           onChange={handleChangeTab}
           sx={{
@@ -115,12 +132,12 @@ export default function UserProfileView() {
           {TABS.map((tab) => (
             <Tab key={tab.value} value={tab.value} icon={tab.icon} label={tab.label} />
           ))}
-        </Tabs>
-      </Card>
+        </Tabs> */}
+        </Card>
 
-      {currentTab === 'profile' && <ProfileHome info={_userAbout} posts={_userFeeds} />}
+        {currentTab === 'profile' && <ProfileHome info={data} posts={_userFeeds} />}
 
-      {currentTab === 'followers' && <ProfileFollowers followers={_userFollowers} />}
+        {/* {currentTab === 'followers' && <ProfileFollowers followers={_userFollowers} />}
 
       {currentTab === 'friends' && (
         <ProfileFriends
@@ -130,7 +147,8 @@ export default function UserProfileView() {
         />
       )}
 
-      {currentTab === 'gallery' && <ProfileGallery gallery={_userGallery} />}
-    </Container>
+      {currentTab === 'gallery' && <ProfileGallery gallery={_userGallery} />} */}
+      </Container>}
+    </>
   );
 }

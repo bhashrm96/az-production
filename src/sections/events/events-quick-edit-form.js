@@ -19,14 +19,17 @@ import { USER_STATUS_OPTIONS } from 'src/_mock';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
+import axios from 'axios';
 import FormProvider, { RHFSelect, RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
-export default function EventsQuickEditForm({ currentEvents, open, onClose }) {
+export default function EventsQuickEditForm({ currentEvents, open, onClose, setIsUpdate }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const [permissions, setPermissions] = useState([]);
+
+  console.log(currentEvents);
 
   const handleAddPermission = () => {
     const newPermission = { page_id: '', permission_id: '' };
@@ -54,39 +57,15 @@ export default function EventsQuickEditForm({ currentEvents, open, onClose }) {
   };
 
   const NewEventsSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    phoneNumber: Yup.string().required('Phone number is required'),
-    address: Yup.string().required('Address is required'),
-    country: Yup.string().required('Country is required'),
-    company: Yup.string().required('Company is required'),
-    state: Yup.string().required('State is required'),
-    city: Yup.string().required('City is required'),
-    role: Yup.string().required('Role is required'),
+    end_time: Yup.string().required('End time is required'),
+    event_title: Yup.string().required('Event title is required'),
+    event_description: Yup.string().required('Event description is required'),
+    start_time: Yup.string().required('Sttart time is required'),
+    event_date: Yup.string().required('Event date is required')
   });
-
-  const defaultValues = useMemo(
-    () => ({
-      firstname: currentEvents?.firstname || '',
-      email: currentEvents?.email || '',
-      phone: currentEvents?.phone || '',
-      lastname: currentEvents?.lastname || '',
-      company_address: currentEvents?.company_address || '',
-      dob: currentEvents?.dob || '',
-      city: currentEvents?.city || '',
-      state: currentEvents?.state || '',
-      zipcode: currentEvents?.zipcode || '',
-      company_name: currentEvents?.company_name || '',
-      website: currentEvents?.website || '',
-      company_about: currentEvents?.company_about || '',
-      position: currentEvents?.position || '',
-    }),
-    [currentEvents]
-  );
 
   const methods = useForm({
     resolver: yupResolver(NewEventsSchema),
-    defaultValues,
   });
 
   const {
@@ -95,13 +74,32 @@ export default function EventsQuickEditForm({ currentEvents, open, onClose }) {
     formState: { isSubmitting },
   } = methods;
 
+  useEffect(() => {
+    reset({
+      end_time: currentEvents?.end_time || '',
+      event_title: currentEvents?.event_title || '',
+      event_description: currentEvents?.event_description || '',
+      start_time: currentEvents?.start_time || '',
+      event_date: currentEvents?.event_date || ''
+    });
+
+  }, [reset, currentEvents]);
+
   const onSubmit = handleSubmit(async (data) => {
+    let body = {
+      id: currentEvents.id,
+      ...data
+    }
+
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      onClose();
-      enqueueSnackbar('Update success!');
-      console.info('DATA', data);
+      axios.put("https://dev-azproduction-api.flynautstaging.com/admin/update_event", body, {
+        headers: {
+          Authorization: sessionStorage.getItem("accessToken")
+        }
+      }).then((res) => {
+        setIsUpdate(pValue => { return !pValue });
+        onClose();
+      })
     } catch (error) {
       console.error(error);
     }
@@ -121,9 +119,6 @@ export default function EventsQuickEditForm({ currentEvents, open, onClose }) {
         <DialogTitle>Quick Update</DialogTitle>
 
         <DialogContent>
-          <Alert variant="outlined" severity="info" sx={{ mb: 3 }}>
-            Account is waiting for confirmation
-          </Alert>
 
           <Box
             rowGap={3}
@@ -133,12 +128,14 @@ export default function EventsQuickEditForm({ currentEvents, open, onClose }) {
               xs: 'repeat(1, 1fr)',
               sm: 'repeat(2, 1fr)',
             }}
+            sx={{ mt: 2 }}
           >
 
-            <RHFTextField name="firstname" label="First Name" />
-            <RHFTextField name="lastname" label="Last Name" />
-            <RHFTextField name="email" label="Email Address" />
-            <RHFTextField name="phone" label="Phone Number" />
+            <RHFTextField name="event_title" label="Event Title" />
+            <RHFTextField name="event_date" label="Event Date" />
+            <RHFTextField name="start_time" label="Start Time" />
+            <RHFTextField name="end_time" label="End Time" />
+            <RHFTextField name="event_description" label="Event Description" />
 
             {/* <RHFAutocomplete
               name="country"
@@ -175,49 +172,6 @@ export default function EventsQuickEditForm({ currentEvents, open, onClose }) {
             <RHFTextField name="company" label="Company" />
             <RHFTextField name="role" label="Role" /> */}
           </Box>
-          <Box
-            rowGap={3}
-            columnGap={2}
-            display="grid"
-            gridTemplateColumns={{
-              xs: 'repeat(1, 1fr)',
-              sm: 'repeat(3, 1fr)',
-            }}
-            sx={permissions.length > 0 ? { mt: 2 } : { mt: 0 }}
-          >
-            {permissions.map((permission, index) => (
-              <>
-                <RHFSelect
-                  onChange={onRoleChange}
-                  name="page"
-                  defaultValue="Select Page"
-                  native={false}
-                >
-                  <MenuItem value="1">Users</MenuItem>
-                  <MenuItem value="2">Vendors</MenuItem>
-                  <MenuItem value="3">Gigs</MenuItem>
-                  <MenuItem value="5">Events</MenuItem>
-                  <MenuItem value="6">Classified</MenuItem>
-                </RHFSelect>
-                <RHFSelect
-                  name="permission"
-                  defaultValue="Select Permission"
-                  index={index}
-                  native={false}
-                >
-                  <MenuItem value={1}>Read Only</MenuItem>
-                  <MenuItem value={2}>Full Access</MenuItem>
-                  <MenuItem value={3}>Deny</MenuItem>
-                </RHFSelect>
-                <Button onClick={() => handleDeletePermission(index)}>
-                  Delete
-                </Button>
-              </>
-            ))}
-          </Box>
-          <Button sx={{ mt: 2 }} onClick={handleAddPermission} variant="soft" color="success">
-            Add Permission
-          </Button>
         </DialogContent>
 
         <DialogActions>

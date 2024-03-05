@@ -138,6 +138,20 @@ export function useNavData() {
             // ],
           },
           {
+            title: t('community'),
+            path: paths.dashboard.community.cards,
+            icon: ICONS.user,
+            id: 3
+            // children: [
+            //   { title: t('profile'), path: paths.dashboard.user.root },
+            //   { title: t('cards'), path: paths.dashboard.user.cards },
+            //   { title: t('list'), path: paths.dashboard.user.list },
+            //   { title: t('create'), path: paths.dashboard.user.new },
+            //   { title: t('edit'), path: paths.dashboard.user.demo.edit },
+            //   { title: t('account'), path: paths.dashboard.user.account },
+            // ],
+          },
+          {
             title: t('moderator'),
             path: paths.dashboard.moderator.list,
             icon: ICONS.user,
@@ -188,6 +202,34 @@ export function useNavData() {
             //   { title: t('edit'), path: paths.dashboard.moderator.demo.edit },
             //   { title: t('account'), path: paths.dashboard.moderator.account },
             // ],
+          },
+
+          {
+            title: t('Management'),
+            path: paths.dashboard.categoryManagement.root,
+            icon: ICONS.user,
+            id: 1,
+            children: [
+              { title: t('Classified Categories'), path: paths.dashboard.categoryManagement.classified },
+              { title: t('Events Categories'), path: paths.dashboard.categoryManagement.events },
+              { title: t('Community Categories'), path: paths.dashboard.categoryManagement.community },
+              { title: t('Gigs Categories'), path: paths.dashboard.categoryManagement.gigs },
+              { title: t('Hashtags'), path: paths.dashboard.categoryManagement.feeds },
+            ],
+          },
+
+          {
+            title: t('Settings'),
+            path: paths.dashboard.settings.root,
+            icon: ICONS.user,
+            id: 1,
+            children: [
+              { title: t('Profile'), path: paths.dashboard.settings.profile },
+              { title: t('FAQ'), path: paths.dashboard.settings.faq },
+              // { title: t('Community Categories'), path: paths.dashboard.categoryManagement.community },
+              // { title: t('Gigs Categories'), path: paths.dashboard.categoryManagement.gigs },
+              // { title: t('Hashtags'), path: paths.dashboard.categoryManagement.feeds },
+            ],
           },
           // PRODUCT
           // {

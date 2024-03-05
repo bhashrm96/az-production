@@ -24,7 +24,7 @@ import UserQuickEditForm from './user-quick-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function UserTableRow({ row, selected, onEditRow, onSelectRow, setIsUpdate }) {
+export default function UserTableRow({ row, selected, onEditRow, onViewRow, onSelectRow, setIsUpdate }) {
   const { first_name, avatarUrl, last_name, status, email_id, phone_number } = row;
 
   const [permissions, setPermissions] = useState([]);
@@ -43,12 +43,16 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, se
   const popover = usePopover();
 
   const handleStatusChange = async (id) => {
-    const res = await axios.put(`https://dev-azproduction-api.flynautstaging.com/admin/user/update-status/${id}`, {
+    const res = await axios.delete(`https://dev-azproduction-api.flynautstaging.com/admin/delete-user/${id}`, {
       headers: {
         Authorization: sessionStorage.getItem("accessToken")
       }
+    }).then(res => {
+      setIsUpdate(pValue => { return !pValue });
+      confirm.onFalse();
+    }).catch(err => {
+      console.log(err);
     })
-    console.log(res);
   }
 
   return (
@@ -133,6 +137,24 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, se
         >
           <Iconify icon="solar:pen-bold" />
           Edit
+        </MenuItem>
+
+        <MenuItem
+          onClick={onViewRow}
+        >
+          <Iconify icon="solar:eye-bold" />
+          View
+        </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            confirm.onTrue();
+            popover.onClose();
+          }}
+          sx={{ color: 'error.main' }}
+        >
+          <Iconify icon="solar:trash-bin-trash-bold" />
+          Delete
         </MenuItem>
       </CustomPopover>
 

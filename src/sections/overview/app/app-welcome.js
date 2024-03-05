@@ -35,7 +35,7 @@ export default function AppWelcome({ title, description, action, img, ...other }
         sx={{
           p: {
             xs: theme.spacing(5, 3, 0, 3),
-            md: theme.spacing(5),
+            md: theme.spacing(5, 5, 0, 5),
           },
           textAlign: { xs: 'center', md: 'left' },
         }}

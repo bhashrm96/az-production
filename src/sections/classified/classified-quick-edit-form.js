@@ -13,19 +13,20 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-
+import axios from 'axios';
 import { countries } from 'src/assets/data';
 import { USER_STATUS_OPTIONS } from 'src/_mock';
-
+import { paths } from 'src/routes/paths';
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
+import { useRouter } from 'src/routes/hooks';
 
 // ----------------------------------------------------------------------
 
-export default function ClassifiedQuickEditForm({ currentClassified, open, onClose }) {
+export default function ClassifiedQuickEditForm({ currentClassified, open, onClose, setIsUpdate }) {
   const { enqueueSnackbar } = useSnackbar();
-
+  const router = useRouter();
   const [permissions, setPermissions] = useState([]);
 
   const handleAddPermission = () => {
@@ -54,39 +55,12 @@ export default function ClassifiedQuickEditForm({ currentClassified, open, onClo
   };
 
   const NewClassifiedSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    phoneNumber: Yup.string().required('Phone number is required'),
-    address: Yup.string().required('Address is required'),
-    country: Yup.string().required('Country is required'),
-    company: Yup.string().required('Company is required'),
-    state: Yup.string().required('State is required'),
-    city: Yup.string().required('City is required'),
-    role: Yup.string().required('Role is required'),
+    title: Yup.string().required('Title is required'),
+    price: Yup.string().required('Price is required')
   });
-
-  const defaultValues = useMemo(
-    () => ({
-      firstname: currentClassified?.firstname || '',
-      email: currentClassified?.email || '',
-      phone: currentClassified?.phone || '',
-      lastname: currentClassified?.lastname || '',
-      company_address: currentClassified?.company_address || '',
-      dob: currentClassified?.dob || '',
-      city: currentClassified?.city || '',
-      state: currentClassified?.state || '',
-      zipcode: currentClassified?.zipcode || '',
-      company_name: currentClassified?.company_name || '',
-      website: currentClassified?.website || '',
-      company_about: currentClassified?.company_about || '',
-      position: currentClassified?.position || '',
-    }),
-    [currentClassified]
-  );
 
   const methods = useForm({
     resolver: yupResolver(NewClassifiedSchema),
-    defaultValues,
   });
 
   const {
@@ -95,13 +69,31 @@ export default function ClassifiedQuickEditForm({ currentClassified, open, onClo
     formState: { isSubmitting },
   } = methods;
 
+  useEffect(() => {
+    reset({
+      title: currentClassified.ad_title || '',
+      price: currentClassified.price || '',
+    });
+
+  }, [reset, currentClassified]);
+
   const onSubmit = handleSubmit(async (data) => {
+
+    let body = {
+      id: currentClassified.id,
+      ad_title: data.title,
+      price: data.price
+    }
+
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      onClose();
-      enqueueSnackbar('Update success!');
-      console.info('DATA', data);
+      axios.put("https://dev-azproduction-api.flynautstaging.com/admin/update_classified", body, {
+        headers: {
+          Authorization: sessionStorage.getItem("accessToken")
+        }
+      }).then((res) => {
+        setIsUpdate(pValue => { return !pValue });
+        onClose();
+      })
     } catch (error) {
       console.error(error);
     }
@@ -121,10 +113,6 @@ export default function ClassifiedQuickEditForm({ currentClassified, open, onClo
         <DialogTitle>Quick Update</DialogTitle>
 
         <DialogContent>
-          <Alert variant="outlined" severity="info" sx={{ mb: 3 }}>
-            Account is waiting for confirmation
-          </Alert>
-
           <Box
             rowGap={3}
             columnGap={2}
@@ -133,12 +121,11 @@ export default function ClassifiedQuickEditForm({ currentClassified, open, onClo
               xs: 'repeat(1, 1fr)',
               sm: 'repeat(2, 1fr)',
             }}
+            sx={{ mt: 2 }}
           >
 
-            <RHFTextField name="firstname" label="First Name" />
-            <RHFTextField name="lastname" label="Last Name" />
-            <RHFTextField name="email" label="Email Address" />
-            <RHFTextField name="phone" label="Phone Number" />
+            <RHFTextField name="title" label="Title" />
+            <RHFTextField name="price" label="Price" />
 
             {/* <RHFAutocomplete
               name="country"
@@ -175,49 +162,6 @@ export default function ClassifiedQuickEditForm({ currentClassified, open, onClo
             <RHFTextField name="company" label="Company" />
             <RHFTextField name="role" label="Role" /> */}
           </Box>
-          <Box
-            rowGap={3}
-            columnGap={2}
-            display="grid"
-            gridTemplateColumns={{
-              xs: 'repeat(1, 1fr)',
-              sm: 'repeat(3, 1fr)',
-            }}
-            sx={permissions.length > 0 ? { mt: 2 } : { mt: 0 }}
-          >
-            {permissions.map((permission, index) => (
-              <>
-                <RHFSelect
-                  onChange={onRoleChange}
-                  name="page"
-                  defaultValue="Select Page"
-                  native={false}
-                >
-                  <MenuItem value="1">Users</MenuItem>
-                  <MenuItem value="2">Vendors</MenuItem>
-                  <MenuItem value="3">Gigs</MenuItem>
-                  <MenuItem value="5">Events</MenuItem>
-                  <MenuItem value="6">Classified</MenuItem>
-                </RHFSelect>
-                <RHFSelect
-                  name="permission"
-                  defaultValue="Select Permission"
-                  index={index}
-                  native={false}
-                >
-                  <MenuItem value={1}>Read Only</MenuItem>
-                  <MenuItem value={2}>Full Access</MenuItem>
-                  <MenuItem value={3}>Deny</MenuItem>
-                </RHFSelect>
-                <Button onClick={() => handleDeletePermission(index)}>
-                  Delete
-                </Button>
-              </>
-            ))}
-          </Box>
-          <Button sx={{ mt: 2 }} onClick={handleAddPermission} variant="soft" color="success">
-            Add Permission
-          </Button>
         </DialogContent>
 
         <DialogActions>

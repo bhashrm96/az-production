@@ -1,4 +1,4 @@
-import { VendorListView } from 'src/sections/vendor/view';
+import { UserListView } from 'src/sections/management-events/view';
 
 // ----------------------------------------------------------------------
 
@@ -7,5 +7,5 @@ export const metadata = {
 };
 
 export default function UserListPage() {
-  return <VendorListView />;
+  return <UserListView />;
 }

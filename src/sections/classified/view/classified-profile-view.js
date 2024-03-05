@@ -20,22 +20,23 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import ProfileHome from '../profile-home';
 import ProfileCover from '../profile-cover';
-import ProfileFriends from '../profile-friends';
-import ProfileGallery from '../profile-gallery';
-import ProfileFollowers from '../profile-followers';
 
 export default function ClassifiedProfileView({ id }) {
   const [data, setData] = useState({})
+  const [isIpdate, setIsUpdate] = useState(false)
+
   useEffect(() => {
-    axios.get("https://dev-azproduction-api.flynautstaging.com/classified/get_All_classified", {
+    axios.post("https://dev-azproduction-api.flynautstaging.com/classified/get_classified_details", {
+      classified_id: id
+    }, {
       headers: {
         Authorization: sessionStorage.getItem('accessToken')
       }
     }).then((res) => {
-
-      setData(res.data.data[id]);
+      setData(res.data.data);
     })
-  }, [])
+  }, [isIpdate])
+
   const settings = useSettingsContext();
 
   const { classified } = useMockedClassified();
@@ -79,7 +80,7 @@ export default function ClassifiedProfileView({ id }) {
         />
       </Card>
 
-      <ProfileHome info={data} posts={_classifiedFeeds} />
+      <ProfileHome setIsUpdate={setIsUpdate} info={data} posts={_classifiedFeeds} />
     </Container>
   );
 }

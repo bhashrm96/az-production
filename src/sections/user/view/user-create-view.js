@@ -6,13 +6,14 @@ import { paths } from 'src/routes/paths';
 
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-
+import { useSearchParams } from 'next/navigation';
 import UserNewEditForm from '../user-new-edit-form';
 
 // ----------------------------------------------------------------------
 
 export default function UserCreateView() {
   const settings = useSettingsContext();
+  const searchParams = useSearchParams()
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -24,10 +25,10 @@ export default function UserCreateView() {
             href: paths.dashboard.root,
           },
           {
-            name: 'User',
-            href: paths.dashboard.user.professionals,
+            name: searchParams.get('role') === '1' ? 'Film Professionals' : 'Producers',
+            href: searchParams.get('role') === '1' ? paths.dashboard.user.professionals : paths.dashboard.user.producers,
           },
-          { name: 'New user' },
+          { name: 'New' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

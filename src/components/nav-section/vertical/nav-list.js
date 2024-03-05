@@ -13,7 +13,26 @@ import NavItem from './nav-item';
 export default function NavList({ data, depth, slotProps }) {
   const pathname = usePathname();
 
-  const active = useActiveLink(data.path, !!data.children);
+  let path = data.path
+
+  const pathSegments = data.path.split('/').filter(segment => segment !== ''); // Split and remove empty segments
+  const numberOfLevels = pathSegments.length;
+
+  if (numberOfLevels === 1) {
+    path = data.path;
+  } else if (numberOfLevels === 2) {
+    path = `/${pathSegments[1]}/`;
+  } else if (numberOfLevels === 3) {
+    path = `/${pathSegments[1]}/${pathSegments[2]}/`;
+  } else if (numberOfLevels === 4) {
+    path = `/${pathSegments[1]}/${pathSegments[2]}/${pathSegments[3]}/`;
+  } else {
+    path = data.path;
+  }
+
+  console.log(path, 'mmmmmmmmmmm');
+
+  const active = useActiveLink(path, !!data.children);
 
   const [openMenu, setOpenMenu] = useState(active);
 
@@ -23,6 +42,10 @@ export default function NavList({ data, depth, slotProps }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
+
+  // useEffect(() => {
+  //   console.log(data.path, 'mmmmmmmmmm');
+  // }, [pathname])
 
   const handleToggleMenu = useCallback(() => {
     if (data.children) {

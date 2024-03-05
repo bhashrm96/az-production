@@ -30,6 +30,8 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 export default function JwtLoginView() {
   const { login } = useAuthContext();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const router = useRouter();
 
   const [errorMsg, setErrorMsg] = useState('');
@@ -47,7 +49,7 @@ export default function JwtLoginView() {
 
   const defaultValues = {
     email: 'admin@azproductionguide.com',
-    password: 'PnTW73!@E1',
+    password: 'alskdjfhg',
   };
 
   const methods = useForm({
@@ -63,10 +65,14 @@ export default function JwtLoginView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      setIsLoading(true);
+
       await login?.(data.email, data.password);
 
-      router.push(returnTo || PATH_AFTER_LOGIN);
+      router.push(PATH_AFTER_LOGIN);
+
     } catch (error) {
+      setIsLoading(false);
       console.error(error);
       reset();
       setErrorMsg(typeof error === 'string' ? error : error.message);
@@ -75,15 +81,7 @@ export default function JwtLoginView() {
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5 }}>
-      <Typography variant="h4">Sign in to AZ Production Guide</Typography>
-
-      <Stack direction="row" spacing={0.5}>
-        <Typography variant="body2">New user?</Typography>
-
-        {/* <Link component={RouterLink} href={paths.auth.jwt.register} variant="subtitle2">
-          Create an account
-        </Link> */}
-      </Stack>
+      <Typography variant="h3">Sign in to AZ Production Guide</Typography>
     </Stack>
   );
 
@@ -118,7 +116,7 @@ export default function JwtLoginView() {
         size="large"
         type="submit"
         variant="contained"
-        loading={isSubmitting}
+        loading={isLoading}
       >
         Login
       </LoadingButton>

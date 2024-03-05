@@ -26,15 +26,17 @@ export default function EventsCardList() {
     <Box
       gap={3}
       display="grid"
-      gridTemplateColumns={{
+      gridTemplateColumns={events.length > 0 ? {
         xs: 'repeat(1, 1fr)',
         sm: 'repeat(2, 1fr)',
         md: 'repeat(3, 1fr)',
-      }}
+      } : {}}
     >
-      {events.length > 0 && events.map((events, index) => (
+      {events.length > 0 ? events.map((events, index) => (
         <EventsCard key={events.id} events={events} index={index} />
-      ))}
+      )) : <div style={{ fontSize: '1.6rem', fontWeight: 'bold', textAlign: "center", width: "100%" }}>
+        No Event Found!
+      </div>}
     </Box>
   );
 }

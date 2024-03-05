@@ -12,6 +12,7 @@ import { useState, useEffect } from 'react';
 export default function FeedsCardList() {
 
   const [feeds, setFeeds] = useState([]);
+  const [isUpdate, setIsUpdate] = useState(false);
 
   useEffect(() => {
     axios.get("https://dev-azproduction-api.flynautstaging.com/admin/feeds?userId=4", {
@@ -21,16 +22,19 @@ export default function FeedsCardList() {
     }).then((res) => {
       setFeeds(res.data.data);
     })
-  }, [])
+  }, [isUpdate])
+
   return (
     <Box
       gap={3}
       display="grid"
-      gridTemplateColumns="1fr" // This ensures only one column for all screen sizes
+      gridTemplateColumns="1fr"
     >
-      {feeds.length > 0 && feeds.map((feed, index) => (
-        <FeedsCard key={feed.id} feeds={feed} index={index} />
-      ))}
+      {feeds.length > 0 ? feeds.map((feed, index) => (
+        <FeedsCard setIsUpdate={setIsUpdate} key={feed.id} feeds={feed} index={index} />
+      )) : <div style={{ fontSize: '1.6rem', fontWeight: 'bold', textAlign: "center", width: "100%" }}>
+        No Post Found!
+      </div>}
     </Box>
   );
 }

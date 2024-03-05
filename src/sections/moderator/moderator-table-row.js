@@ -20,6 +20,7 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 import ModeratorQuickEditForm from './moderator-quick-edit-form';
+import axios from 'axios';
 
 // ----------------------------------------------------------------------
 
@@ -34,6 +35,19 @@ export default function ModeratorTableRow({ row, selected, onEditRow, onSelectRo
       setPermissions(data)
     }
   }, [])
+
+  const handleStatusChange = async (id) => {
+    const res = await axios.delete(`https://dev-azproduction-api.flynautstaging.com/admin/delete_moderator/${id}`, {
+      headers: {
+        Authorization: sessionStorage.getItem("accessToken")
+      }
+    }).then(res => {
+      setIsUpdate(pValue => { return !pValue });
+      confirm.onFalse();
+    }).catch(err => {
+      console.log(err);
+    })
+  }
 
   const confirm = useBoolean();
 
@@ -124,6 +138,17 @@ export default function ModeratorTableRow({ row, selected, onEditRow, onSelectRo
           <Iconify icon="solar:pen-bold" />
           Edit
         </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            confirm.onTrue();
+            popover.onClose();
+          }}
+          sx={{ color: 'error.main' }}
+        >
+          <Iconify icon="solar:trash-bin-trash-bold" />
+          Delete
+        </MenuItem>
       </CustomPopover>
 
       <ConfirmDialog
@@ -132,7 +157,7 @@ export default function ModeratorTableRow({ row, selected, onEditRow, onSelectRo
         title="Delete"
         content="Are you sure want to delete?"
         action={
-          <Button variant="contained" color="error" onClick={onDeleteRow}>
+          <Button variant="contained" color="error" onClick={() => handleStatusChange(row.id)}>
             Delete
           </Button>
         }

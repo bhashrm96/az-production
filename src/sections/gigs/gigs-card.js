@@ -29,7 +29,7 @@ export default function GigsCard({ gigs, index }) {
   const { first_name, image, gigs_title, gigs_category_name, position, role, expertise, totalFollowers, totalPosts, avatarUrl, totalFollowing } = gigs;
 
   return (
-    <div onClick={() => router.push(paths.dashboard.gigs.details(index))}>
+    <div onClick={() => router.push(paths.dashboard.gigs.details(gigs.id))}>
       <Card sx={{ textAlign: 'center' }}>
         <Box sx={{ position: 'relative' }}>
           {/* <AvatarShape
@@ -67,7 +67,7 @@ export default function GigsCard({ gigs, index }) {
         </Box>
 
         <ListItemText
-          sx={{ mt: 7, mb: 1 }}
+          sx={{ mt: 2, mb: 1 }}
           primary={gigs_title}
           secondary={role}
           primaryTypographyProps={{ typography: 'subtitle1' }}

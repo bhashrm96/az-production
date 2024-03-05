@@ -106,7 +106,7 @@ const Image = forwardRef(
               pt: getRatio(ratio),
             }),
           },
-          ...overlayStyles,
+          // ...overlayStyles,
           ...sx,
         }}
         {...other}

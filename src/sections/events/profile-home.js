@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Fab from '@mui/material/Fab';
@@ -22,10 +22,14 @@ import { _socials } from 'src/_mock';
 import Iconify from 'src/components/iconify';
 
 import ProfilePostItem from './profile-post-item';
+import EventsQuickEditForm from './events-quick-edit-form';
+import EventsQuickDeleteForm from './events-quick-delete-form';
 
 // ----------------------------------------------------------------------
 
-export default function ProfileHome({ info, posts }) {
+export default function ProfileHome({ info, posts, setIsUpdate }) {
+  const [isEdit, setIsEdit] = useState(false)
+  const [isDelete, setIsDelete] = useState(false)
   const fileRef = useRef(null);
 
   const handleAttach = () => {
@@ -34,10 +38,55 @@ export default function ProfileHome({ info, posts }) {
     }
   };
 
+  const handleOpenEditModal = () => {
+    setIsEdit(true);
+  }
+
+  const handleCloseEditModal = () => {
+    setIsEdit(false);
+  }
+
+  const handleOpenDeleteModal = () => {
+    setIsDelete(true);
+  }
+
+  const handleCloseDeleteModal = () => {
+    setIsDelete(false);
+  }
+
   const renderAbout = (
     <Card>
       <Stack spacing={2} sx={{ p: 3 }}>
+        <div style={{
+          cursor: 'pointer',
+          display: 'flex',
+          justifyContent: 'end'
+        }}>
+          <div
+            onClick={handleOpenEditModal}
+          >
 
+            <Iconify
+              width={24}
+              icon="solar:pen-bold"
+            />
+
+          </div>
+          <div
+            style={{
+              marginLeft: '1rem'
+            }}
+            onClick={handleOpenDeleteModal}
+          >
+
+            <Iconify
+              width={24}
+              color="red"
+              icon="solar:trash-bin-trash-bold"
+            />
+
+          </div>
+        </div>
         <Stack direction="row" spacing={2}>
           <Box sx={{ typography: 'body2' }}>
             {`Category: `}
@@ -79,6 +128,8 @@ export default function ProfileHome({ info, posts }) {
     <Grid container spacing={3}>
       <Grid xs={12} md={12}>
         <Stack spacing={3}>
+          <EventsQuickEditForm setIsUpdate={setIsUpdate} currentEvents={info} open={isEdit} onClose={handleCloseEditModal} />
+          <EventsQuickDeleteForm setIsUpdate={setIsUpdate} currentEvents={info} open={isDelete} onClose={handleCloseDeleteModal} />
           {renderAbout}
         </Stack>
       </Grid>

@@ -37,7 +37,6 @@ export default function ProfileHome({ info, posts }) {
   const renderAbout = (
     <Card>
       <Stack spacing={2} sx={{ p: 3 }}>
-
         <Stack direction="row" spacing={2}>
           <Box sx={{ typography: 'body2' }}>
             {`Category: `}

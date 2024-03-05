@@ -95,7 +95,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function UserListView() {
+export default function UserListProfessionalView() {
   const table = useTable();
 
   const settings = useSettingsContext();
@@ -130,8 +130,8 @@ export default function UserListView() {
   const [isUpdate, setIsUpdate] = useState(false);
 
   useEffect(() => {
-    axios.get("https://dev-azproduction-api.flynautstaging.com/admin/all-users").then((res) => {
-      setTableData(res.data);
+    axios.get("https://dev-azproduction-api.flynautstaging.com/admin/all-professionals").then((res) => {
+      setTableData(res.data.data);
     })
   }, [isUpdate])
 
@@ -199,7 +199,7 @@ export default function UserListView() {
           heading="List"
           links={[
             { name: 'Dashboard', href: paths.dashboard.root },
-            { name: 'User' },
+            { name: 'Film Professionals' },
           ]}
           action={
             'moderator' in JSON.parse(localStorage.getItem("user"))
@@ -207,14 +207,20 @@ export default function UserListView() {
                 permissions[0].permission_name === "full access"
                 ? <Button
                   component={RouterLink}
-                  href={paths.dashboard.user.new}
+                  href={{
+                    pathname: paths.dashboard.user.new,
+                    query: { role: 1 }
+                  }}
                   variant="contained"
                   startIcon={<Iconify icon="mingcute:add-line" />}
                 >
                   New User
                 </Button> : null) : <Button
                   component={RouterLink}
-                  href={paths.dashboard.user.new}
+                  href={{
+                    pathname: paths.dashboard.user.new,
+                    query: { role: 1 }
+                  }}
                   variant="contained"
                   startIcon={<Iconify icon="mingcute:add-line" />}
                 >
@@ -339,7 +345,9 @@ export default function UserListView() {
                         onSelectRow={() => table.onSelectRow(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}
                         onEditRow={() => handleEditRow(row.id)}
+                        onViewRow={() => router.push(paths.dashboard.user.details(row.id))}
                         setIsUpdate={setIsUpdate}
+                        role={1}
                       />
                     ))}
 

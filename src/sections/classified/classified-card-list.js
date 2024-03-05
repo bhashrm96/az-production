@@ -26,15 +26,17 @@ export default function ClassifiedCardList() {
     <Box
       gap={3}
       display="grid"
-      gridTemplateColumns={{
+      gridTemplateColumns={classified.length > 0 ? {
         xs: 'repeat(1, 1fr)',
         sm: 'repeat(2, 1fr)',
         md: 'repeat(3, 1fr)',
-      }}
+      } : {}}
     >
-      {classified.length > 0 && classified.map((classified, index) => (
+      {classified.length > 0 ? classified.map((classified, index) => (
         <ClassifiedCard key={classified.id} classified={classified} index={index} />
-      ))}
+      )) : <div style={{ fontSize: '1.6rem', fontWeight: 'bold', textAlign: "center", width: "100%" }}>
+        No Classified Found!
+      </div>}
     </Box>
   );
 }

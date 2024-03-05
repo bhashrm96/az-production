@@ -32,6 +32,7 @@ import FormProvider, {
   RHFAutocomplete,
   RHFSelect
 } from 'src/components/hook-form';
+import { useSearchParams } from 'src/routes/hooks';
 
 import axios from 'axios';
 
@@ -39,6 +40,7 @@ import axios from 'axios';
 
 export default function UserNewEditForm({ currentUser }) {
   const router = useRouter();
+  const searchParams = useSearchParams()
 
   const [gender, setGender] = useState([]);
 
@@ -95,12 +97,16 @@ export default function UserNewEditForm({ currentUser }) {
         email_id: data.email,
         password: data.password,
         phone_number: data.phone,
-        gender
+        gender,
+        role_id: searchParams.get('role')
       }
 
       await axios.post('https://dev-azproduction-api.flynautstaging.com/admin/create-user', body).then(() => {
-        console.log('yyyyyy');
-        router.push(paths.dashboard.user.professionals);
+        if (searchParams.get('role') === '1') {
+          router.push(paths.dashboard.user.professionals);
+        } else {
+          router.push(paths.dashboard.user.producers);
+        }
       }).catch((err) => {
         console.log(err);
       })

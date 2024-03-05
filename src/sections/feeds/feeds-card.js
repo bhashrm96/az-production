@@ -25,12 +25,13 @@ import axios from 'axios';
 
 // ----------------------------------------------------------------------
 
-export default function FeedsCard({ feeds, index }) {
+export default function FeedsCard({ feeds, index, setIsUpdate }) {
   const theme = useTheme();
   const router = useRouter();
 
   const [isLikesModalOpen, setLikesModalOpen] = useState(false);
   const [isCommentsModalOpen, setCommentsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [likes, setLikes] = useState([]);
   const [comments, setComments] = useState([]);
   const { title, images, description, created_at, avatarUrl, commentsCount, like_count } = feeds;
@@ -59,6 +60,14 @@ export default function FeedsCard({ feeds, index }) {
     }
   }, [isCommentsModalOpen])
 
+  const handleOpenDeleteModal = () => {
+    setDeleteModalOpen(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setDeleteModalOpen(false);
+  };
+
   const handleOpenLikesModal = () => {
     setLikesModalOpen(true);
   };
@@ -75,6 +84,11 @@ export default function FeedsCard({ feeds, index }) {
     setCommentsModalOpen(false);
   };
 
+  const handleDeleteFeed = async () => {
+    await axios.post('https://dev-azproduction-api.flynautstaging.com/admin/deletefeed', { feedId: feeds.feed_id })
+    setIsUpdate(pValue => !pValue);
+    setDeleteModalOpen(false);
+  };
 
   return (
     <div
@@ -201,12 +215,37 @@ export default function FeedsCard({ feeds, index }) {
               </div>
 
             </Card>
-          )) : 'No likes yet!'}
+          )) : 'No comments yet!'}
         </DialogContent>
 
         <DialogActions>
           <Button variant="outlined" onClick={handleCloseCommentsModal}>
             Close
+          </Button>
+
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        fullWidth
+        maxWidth={false}
+        open={isDeleteModalOpen}
+        onClose={handleCloseDeleteModal}
+        PaperProps={{
+          sx: { maxWidth: 720 },
+        }}
+      >
+        <DialogTitle>Delete Feed</DialogTitle>
+
+        <DialogContent>
+          Do you really want to delete this feed?
+        </DialogContent>
+
+        <DialogActions>
+          <Button variant="contained" onClick={handleDeleteFeed}>
+            Yes
+          </Button>
+          <Button variant="outlined" onClick={handleCloseDeleteModal}>
+            Cancel
           </Button>
 
         </DialogActions>
@@ -242,6 +281,19 @@ export default function FeedsCard({ feeds, index }) {
               </div>
             </div>
           </div>
+
+          <div style={{
+            cursor: 'pointer',
+          }}
+            onClick={handleOpenDeleteModal}>
+
+            <Iconify
+              style={{ color: 'red' }}
+              width={24}
+              icon="iconamoon:trash-bold"
+            />
+
+          </div>
         </Box>
 
         <ListItemText
@@ -264,12 +316,12 @@ export default function FeedsCard({ feeds, index }) {
             }}
           /> */}
 
-          <Image
+          {images.length > 0 && <Image
             src={images.length > 0 && images[0].url}
             alt={title}
             ratio="16/9"
           // overlay={alpha(theme.palette.grey[900], 0.48)}
-          />
+          />}
 
           <div style={{ display: 'flex', padding: '1rem' }}>
             <div
@@ -286,7 +338,7 @@ export default function FeedsCard({ feeds, index }) {
             >
               <Iconify
                 width={24}
-                icon="iconamoon:comment-light"
+                icon="iconamoon:comment-bold"
               />
               <Typography
                 variant="body2"
@@ -311,7 +363,7 @@ export default function FeedsCard({ feeds, index }) {
             >
               <Iconify
                 width={24}
-                icon="iconamoon:like-light"
+                icon="iconamoon:like-bold"
               />
               <Typography
                 variant="body2"

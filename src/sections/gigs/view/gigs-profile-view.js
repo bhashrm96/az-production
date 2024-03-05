@@ -26,16 +26,16 @@ import ProfileFollowers from '../profile-followers';
 
 export default function GigsProfileView({ id }) {
   const [data, setData] = useState({})
+  const [isUpdate, setIsUpdate] = useState(false);
   useEffect(() => {
-    axios.get("https://dev-azproduction-api.flynautstaging.com/gigs/view_all_gigs", {
+    axios.get(`https://dev-azproduction-api.flynautstaging.com/admin/view_all_gigs_by_id/${id}`, {
       headers: {
         Authorization: sessionStorage.getItem('accessToken')
       }
     }).then((res) => {
-
-      setData(res.data.data[id]);
+      setData(res.data.data[0]);
     })
-  }, [])
+  }, [isUpdate])
   const settings = useSettingsContext();
 
   const { gigs } = useMockedGigs();
@@ -80,7 +80,7 @@ export default function GigsProfileView({ id }) {
         />
       </Card>
 
-      <ProfileHome info={data} posts={_gigsFeeds} />
+      <ProfileHome setIsUpdate={setIsUpdate} info={data} posts={_gigsFeeds} />
     </Container>
   );
 }
