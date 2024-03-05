@@ -66,7 +66,6 @@ export default function AuthClassicLayout({ children, image, title }) {
   const renderContent = (
     <Stack
       sx={{
-        mx: 'auto',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
